@@ -18,6 +18,7 @@ function listDirectory(subDir, resolve, reject) {
     if (err) {
       logger.error(err)
       reject('Error while listing directory.')
+      return
     }
 
     resolve(files)

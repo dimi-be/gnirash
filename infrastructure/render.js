@@ -24,7 +24,7 @@ function getView(para, originalUrl) {
     __dirname,
     '..',
     urlPieces[0],
-    'routes',
+    'routespipi',
     urlPieces[urlPieces.length - 1],
   )
 
@@ -43,6 +43,7 @@ function renderView(view, model = undefined) {
     fs.readFile(view, (error, template) => {
       if (error) {
         reject(error)
+        return
       }
 
       const output = model
@@ -65,6 +66,7 @@ function middleware(request, response, next) {
     .catch((error) => {
       response.status = 500
       response.send(error)
+      logger.error(error)
     })
   }
 
