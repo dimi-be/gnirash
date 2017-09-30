@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const pug = require('pug')
 const logger = require('./logger')
 
@@ -33,13 +34,34 @@ function getView(para, originalUrl) {
   return viewPath
 }
 
+function renderView(view, model = undefined) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(view, (error, template) => {
+      if (error) {
+        reject(error)
+      }
+
+      const output = model
+        ? pug.render(template, model)
+        : pug.render(template)
+
+      resolve(output)
+    })
+  })
+}
+
 function middleware(request, response, next) {
   response.render = (...para) => {
     const view = getView(para, request.originalUrl)
     const model = getModel(para)
-    const compiledFuntion = pug.compileFile(view)
-    const output = compiledFuntion(model)
-    response.send(output)
+    renderView(view, model)
+    .then((output) => {
+      response.send(output)
+    })
+    .catch((error) => {
+      response.status = 500
+      response.send(error)
+    })
   }
 
   next()
