@@ -1,4 +1,3 @@
-const logger = require('../../infrastructure/logger')
 const router = require('../../infrastructure/router')()
 const list = require('./list')
 
@@ -13,8 +12,6 @@ router.get('/', (req, res) => {
 })
 
 router.get('/list', (req, res) => {
-  logger.info('get list/')
-
   list().then((model) => {
     res.render(model)
   })

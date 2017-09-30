@@ -18,6 +18,8 @@
     "eslint-plugin-import": "^2.2.0"
   },
   "dependencies": {
+    "date-time": "^2.1.0",
+    "error-stack-parser": "^2.0.1",
     "express": "^4.16.0",
     "pug": "^2.0.0-rc.4"
   }

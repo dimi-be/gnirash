@@ -6,10 +6,10 @@ function listDirectory(resolve, reject) {
   const currentDirPath = __dirname
   const listDirPath = path.join(currentDirPath, '/../../test-folder')
 
-  logger.info(`listDirPath=${listDirPath}`)
+  logger.debug(`listDirPath=${listDirPath}`)
 
   fs.readdir(listDirPath, (err, files) => {
-    logger.info('readdir callback', err, files)
+    logger.debug(err, files)
 
     if (err) {
       logger.error(err)

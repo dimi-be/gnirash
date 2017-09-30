@@ -30,11 +30,12 @@ function getView(para, originalUrl) {
     : path.join(viewFile, para[0])
 
   const viewPath = `${viewBaseName}.pug`
-  logger.info(viewPath)
   return viewPath
 }
 
 function renderView(view, model = undefined) {
+  logger.debug(view, model)
+
   return new Promise((resolve, reject) => {
     fs.readFile(view, (error, template) => {
       if (error) {
