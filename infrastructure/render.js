@@ -26,14 +26,14 @@ function getView(para, originalUrl) {
 
   const viewBaseName = para.length === 1 || para.length === 0
     ? viewFile
-    : path.join(viewFile, '..', para[0])
+    : path.join(viewFile, para[0])
 
   const viewPath = `${viewBaseName}.pug`
   logger.info(viewPath)
   return viewPath
 }
 
-function middleware (request, response, next) {
+function middleware(request, response, next) {
   response.render = (...para) => {
     const view = getView(para, request.originalUrl)
     const model = getModel(para)
