@@ -1,17 +1,6 @@
-const express = require('express')
 const logger = require('./infrastructure/logger')
-const filesRoutes = require('./files/routes')
-
-const app = express()
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.use('/files', filesRoutes)
+const app = require('./infrastructure/server')
 
 app.listen(3000, () => {
-  logger.info('Example app listening on port 3000!')
+  logger.info('gnirash listening on port 3000!')
 })
-
-logger.configure(app)
