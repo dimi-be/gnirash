@@ -1,8 +1,7 @@
-const logger = require('../../infrastructure/logger')
 const fileService = require('../service')
 
-module.exports = function() {
-  return new Promise((resolve, reject) => {
+module.exports = () =>
+  new Promise((resolve, reject) => {
     Promise.all([fileService.list()])
     .then(([files]) => {
       resolve({
@@ -11,4 +10,3 @@ module.exports = function() {
     })
     .catch(reject)
   })
-}

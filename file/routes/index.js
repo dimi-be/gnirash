@@ -1,11 +1,12 @@
 const express = require('express')
-const router = express.Router()
 const logger = require('../../infrastructure/logger')
+const list = require('./list')
 
-router.get('/', function (req, res) {
+const router = express.Router()
+
+router.get('/', (req, res) => {
   logger.info('get list/')
-  const list = require('./list')
-  
+
   list().then((model) => {
     logger.info('list model', model)
     res.render('list', model)
