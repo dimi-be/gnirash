@@ -3,8 +3,11 @@ const errorStackParser = require('error-stack-parser')
 const dateTime = require('date-time')
 
 class Logger {
-  configure(router) {
-    router.use((...args) => this._middleware(...args))
+  configure(app) {
+    app.use((...args) => this._logRequest(...args))
+    app.use((err, req, res, n) => {
+      this._logRequestError(err, req, res, n)
+    })
   }
 
   debug(...args) {
@@ -19,8 +22,16 @@ class Logger {
     console.error('E', this._getPrefix(), ...args)
   }
 
-  _middleware(request, response, next) {
+  _logRequest(request, response, next) {
     this.info(request.method, request.originalUrl)
+    next()
+  }
+
+  _logRequestError(error, request, response, next) {
+    this.error(error)
+    if (error.stack) {
+      this.error(error.stack)
+    }
     next()
   }
 

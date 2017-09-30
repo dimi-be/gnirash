@@ -16,17 +16,20 @@ function getModel(para) {
 }
 
 function getView(para, originalUrl) {
-  const urlPieces = originalUrl.split('/')
+  const urlPieces = originalUrl
+    .split('/')
+    .filter(v => v ? v !== '' : false)
+    .concat([''])
   const viewFile = path.join(
     __dirname,
     '..',
-    ...urlPieces.slice(0, -1),
+    urlPieces[0],
     'routes',
     urlPieces[urlPieces.length - 1],
   )
 
   const viewBaseName = para.length === 1 || para.length === 0
-    ? viewFile
+    ? path.join(viewFile, urlPieces[1])
     : path.join(viewFile, para[0])
 
   const viewPath = `${viewBaseName}.pug`
@@ -53,7 +56,7 @@ function renderView(view, model = undefined) {
 
 function middleware(request, response, next) {
   response.render = (...para) => {
-    const view = getView(para, request.originalUrl)
+    const view = getView(para, request.baseUrl)
     const model = getModel(para)
     renderView(view, model)
     .then((output) => {

@@ -1,8 +1,8 @@
 const fileService = require('../service')
 
-module.exports = () =>
+module.exports = subDir =>
   new Promise((resolve, reject) => {
-    Promise.all([fileService.list()])
+    Promise.all([fileService.list(subDir)])
     .then(([files]) => {
       resolve({
         files,

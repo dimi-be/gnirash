@@ -13,3 +13,5 @@ app.use('/files', filesRoutes)
 app.listen(3000, () => {
   logger.info('Example app listening on port 3000!')
 })
+
+logger.configure(app)
