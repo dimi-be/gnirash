@@ -1,10 +1,10 @@
 const fs = require('fs')
+const path = require('path')
 const logger = require('../../infrastructure/logger')
+const stat = require('./stat')
 
-function listDirectory(path, resolve, reject) {
-  logger.debug(path)
-
-  fs.readdir(path, (err, files) => {
+function listDirectory(directory, resolve, reject) {
+  fs.readdir(directory.path, (err, files) => {
     logger.debug(err, files)
 
     if (err) {
@@ -13,9 +13,23 @@ function listDirectory(path, resolve, reject) {
       return
     }
 
-    resolve(files)
+    const filePaths = files.map(x => path.join(directory.path, x))
+    const stats = filePaths.map(x => stat(x))
+
+    Promise
+      .all(stats)
+      .then(resolve)
+      .catch(reject)
   })
 }
 
-module.exports = path =>
-  new Promise((resolve, reject) => listDirectory(path, resolve, reject))
+/**
+ *
+ * @param {File} directory
+ * @returns {Promise.<File[]>}
+ */
+function list(directory) {
+  return new Promise((resolve, reject) => listDirectory(directory, resolve, reject))
+}
+
+module.exports = list

@@ -9,7 +9,7 @@ function getFileType(stats) {
   }
 
   if (stats.isFile()) {
-    return FileType.directory
+    return FileType.file
   }
 
   return FileType.unknown
