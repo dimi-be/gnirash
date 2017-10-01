@@ -22,43 +22,28 @@ class GetModel {
   }
 }
 
-function list(directory) {
-  return new Promise((resolve, reject) => {
-    Promise.all([fileService.list(directory)])
-    .then(([files]) => {
-      resolve(new GetModel(directory, files))
-    })
-    .catch(reject)
-  })
-}
+function createModel(file) {
+  if (file.fileType === FileType.directory) {
+    return fileService.list(file)
+      .then(files =>
+        Promise.resolve(new GetModel(file, files)))
+  } else if (file.fileType === FileType.file) {
+    return Promise.resolve(new GetModel(file, []))
+  }
 
-function singleFile(file) {
-  return Promise.resolve(new GetModel(file, []))
+  logger.error(`invalid fileType ${file.fileType}`)
+  return Promise.reject(`invalid fileType ${file.fileType}`)
 }
 
 /**
- *
- * @param {string} relPath
+ * @param {string} virtualPath
  * @returns {Promise.<GetModel>}
  */
-function get(relPath) {
-  return new Promise((resolve, reject) => {
-    fileService
-    .getAbsolutePath(relPath)
-    .then(path => fileService.stat(path))
-    .then((file) => {
-      if (file.fileType === FileType.directory) {
-        return list(file)
-      } else if (file.fileType === FileType.file) {
-        return singleFile(file)
-      }
-
-      logger.error(`invalid fileType ${file.fileType}`)
-      return Promise.reject(`invalid fileType ${file.fileType}`)
-    })
-    .then(resolve)
-    .catch(reject)
-  })
+function get(virtualPath) {
+  return Promise.resolve()
+    .then(() => fileService.getAbsolutePath(virtualPath))
+    .then(absolutePath => fileService.stat(absolutePath))
+    .then(createModel)
 }
 
 module.exports = get

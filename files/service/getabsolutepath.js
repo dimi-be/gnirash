@@ -1,17 +1,22 @@
 const path = require('path')
 
-function getAbsolutePath(relPath, resolve, reject) {
-  try {
-    const currentDirPath = __dirname
-    const absolutePath = relPath
-      ? path.join(currentDirPath, '/../../test-folder', relPath)
-      : path.join(currentDirPath, '/../../test-folder')
+/**
+ * Transforms the virtualPath into a path that exists
+ * on the filesystem.
+ *
+ * @param {string} virtualPath
+ * @return {Promise.<string>}
+ */
+function getAbsolutePath(virtualPath) {
+  return Promise.resolve()
+    .then(() => {
+      const currentDirPath = __dirname
+      const absolutePath = virtualPath
+        ? path.join(currentDirPath, '/../../test-folder', virtualPath)
+        : path.join(currentDirPath, '/../../test-folder')
 
-    resolve(absolutePath)
-  } catch (error) {
-    reject(error)
-  }
+      return Promise.resolve(absolutePath)
+    })
 }
 
-module.exports = relPath =>
-  new Promise((resolve, reject) => getAbsolutePath(relPath, resolve, reject))
+module.exports = getAbsolutePath

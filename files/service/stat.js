@@ -15,7 +15,7 @@ function getFileType(stats) {
   return FileType.unknown
 }
 
-function statFile(path, resolve, reject) {
+function getStat(path, resolve, reject) {
   logger.debug(path)
 
   fs.stat(path, (error, stats) => {
@@ -38,5 +38,15 @@ function statFile(path, resolve, reject) {
   })
 }
 
-module.exports = path =>
-  new Promise((resolve, reject) => statFile(path, resolve, reject))
+/**
+ * Get a file based on the absolute (real) path given
+ *
+ * @param {string} absolutePath
+ * @return {Promise.<File>}
+ */
+function stat(absolutePath) {
+  return new Promise((resolve, reject) =>
+      getStat(absolutePath, resolve, reject))
+}
+
+module.exports = stat

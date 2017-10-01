@@ -24,12 +24,15 @@ function listDirectory(directory, resolve, reject) {
 }
 
 /**
+ * Returns a list of files and directories in the given directory
  *
  * @param {File} directory
  * @returns {Promise.<File[]>}
  */
 function list(directory) {
-  return new Promise((resolve, reject) => listDirectory(directory, resolve, reject))
+  return new Promise((resolve, reject) => {
+    listDirectory(directory, resolve, reject)
+  })
 }
 
 module.exports = list
