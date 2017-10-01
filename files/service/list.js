@@ -1,18 +1,10 @@
 const fs = require('fs')
-const path = require('path')
 const logger = require('../../infrastructure/logger')
 
-function listDirectory(subDir, resolve, reject) {
-  logger.debug(subDir)
+function listDirectory(path, resolve, reject) {
+  logger.debug(path)
 
-  const currentDirPath = __dirname
-  const listDirPath = subDir
-    ? path.join(currentDirPath, '/../../test-folder', subDir)
-    : path.join(currentDirPath, '/../../test-folder')
-
-  logger.debug(`listDirPath=${listDirPath}`)
-
-  fs.readdir(listDirPath, (err, files) => {
+  fs.readdir(path, (err, files) => {
     logger.debug(err, files)
 
     if (err) {
@@ -25,5 +17,5 @@ function listDirectory(subDir, resolve, reject) {
   })
 }
 
-module.exports = (subDir = undefined) =>
-  new Promise((resolve, reject) => listDirectory(subDir, resolve, reject))
+module.exports = path =>
+  new Promise((resolve, reject) => listDirectory(path, resolve, reject))
