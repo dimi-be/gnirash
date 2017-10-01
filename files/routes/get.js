@@ -24,6 +24,7 @@ function get(relPath, resolve, reject) {
           .catch(reject)
       }
     })
+    .catch(reject)
 }
 
 module.exports = path =>
