@@ -1,4 +1,3 @@
-const logger = require('../../infrastructure/logger')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
 
@@ -22,28 +21,26 @@ class GetModel {
   }
 }
 
-function createModel(file) {
+async function createModel(file) {
   if (file.fileType === FileType.directory) {
-    return fileService.list(file)
-      .then(files =>
-        Promise.resolve(new GetModel(file, files)))
+    const files = await fileService.list(file)
+    return new GetModel(file, files)
   } else if (file.fileType === FileType.file) {
-    return Promise.resolve(new GetModel(file, []))
+    return new GetModel(file, [])
   }
 
-  logger.error(`invalid fileType ${file.fileType}`)
-  return Promise.reject(`invalid fileType ${file.fileType}`)
+  throw new Error(`invalid fileType ${file.fileType}`)
 }
 
 /**
  * @param {string} virtualPath
  * @returns {Promise.<GetModel>}
  */
-function get(virtualPath) {
-  return Promise.resolve()
-    .then(() => fileService.getAbsolutePath(virtualPath))
-    .then(absolutePath => fileService.stat(absolutePath))
-    .then(createModel)
+async function get(virtualPath) {
+  const absolutePath = await fileService.getAbsolutePath(virtualPath)
+  const file = await fileService.stat(absolutePath)
+
+  return createModel(file)
 }
 
 module.exports = get
