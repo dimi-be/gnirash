@@ -1,8 +1,7 @@
-html
-  head
-    title List
-  body
-    h1 Files
-    ul
-      each file in files
-        li=file.name + ' ' + file.path
+extends ../../views/layout.pug
+
+block content
+  h1 Files
+  ul
+    each file in files
+      li=file.name + ' ' + file.path

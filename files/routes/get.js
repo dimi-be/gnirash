@@ -3,11 +3,11 @@ const fileService = require('../service')
 
 class GetModel {
   /**
-   *
    * @param {File} file
    * @param {File[]} files
    */
   constructor(file, files) {
+    this.title = 'List'
     this.file = file
     this.files = files
   }
