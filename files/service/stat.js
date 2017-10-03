@@ -3,6 +3,7 @@ const util = require('util')
 const logger = require('../../infrastructure/logger')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
+const getVirtualPath = require('../service/getvirtualpath')
 
 function getFileType(stats) {
   if (stats.isDirectory()) {
@@ -29,10 +30,11 @@ async function stat(absolutePath) {
   const fileType = getFileType(stats)
 
   if (fileType === FileType.unknown) {
-    throw new Error(`unkown file type `)
+    throw new Error('unkown file type')
   }
 
-  return new File(absolutePath, fileType)
+  const virtualPath = await getVirtualPath(absolutePath)
+  return new File(absolutePath, virtualPath, fileType)
 }
 
 module.exports = stat

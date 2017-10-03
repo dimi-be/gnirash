@@ -8,7 +8,7 @@ router.get('/*?', async (req, res) => {
   if (model.file.fileType === FileType.directory) {
     res.render('get', model)
   } else if (model.file.fileType === FileType.file) {
-    res.download(model.file.path)
+    res.download(model.file.absolutePath)
   } else {
     throw Error(`unkown filetype ${model.file.fileType}`)
   }

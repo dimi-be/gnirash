@@ -29,9 +29,6 @@ class Logger {
 
   _logRequestError(error, request, response, next) {
     this.error(error)
-    if (error.stack) {
-      this.error(error.stack)
-    }
     next()
   }
 

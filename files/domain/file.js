@@ -1,11 +1,16 @@
 class File {
-  constructor(path, fileType) {
-    this._path = path
+  constructor(absolutePath, virtualPath, fileType) {
+    this._absolutePath = absolutePath
+    this._virtualPath = virtualPath
     this._fileType = fileType
   }
 
-  get path() {
-    return this._path
+  get absolutePath() {
+    return this._absolutePath
+  }
+
+  get virtualPath() {
+    return this._virtualPath
   }
 
   get fileType() {
@@ -13,8 +18,12 @@ class File {
   }
 
   get name() {
-    const pathPieces = this._path.split('/')
-    return pathPieces[pathPieces.length - 1]
+    const pathPieces = this._virtualPath
+      .split('/')
+      .filter(x => x.length > 0)
+    return pathPieces.length === 0
+      ? '/'
+      : pathPieces[pathPieces.length - 1]
   }
 }
 
