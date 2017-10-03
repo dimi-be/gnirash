@@ -1,8 +1,5 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable class-methods-use-this */
 const path = require('path')
-const fs = require('fs')
-const pug = require('pug')
-const logger = require('./logger')
 
 class Render {
   configure(app) {
@@ -10,81 +7,53 @@ class Render {
   }
 
   _replaceRenderFunction(request, response, next) {
-    response.render = this._render
+    const render = response.render
+
+    response.render = (...args) => {
+      this._render(response, render, ...args)
+    }
+
     next()
   }
 
-  // In this context 'this' is a response object
-  _render(...args) {
-    Promise.all([
-      Render._getView(args, this.req.baseUrl),
-      Render._getModel(args),
-    ])
-    .then(([view, model]) => Render.renderViewFile(view, model))
-    .then((output) => {
-      this.send(output)
-    })
-    .catch((error) => {
-      this.status = 500
-      this.send(error)
-      this.error(error)
-    })
+  _render(response, render, ...args) {
+    const viewPath = this._getViewPath(args, response.req.originalUrl)
+    const model = this._getModel(args)
+    render.call(response, viewPath, model)
   }
 
-  static _getModel(para) {
-    return new Promise((resolve, reject) => {
-      if (para.length === 0) {
-        resolve(undefined)
-      } else if (para.length === 1) {
-        resolve(para[0])
-      } else if (para.length === 2) {
-        resolve(para[1])
-      } else {
-        reject('Render only has two parameters')
-      }
-    })
+  _getModel(para) {
+    if (para.length === 0) {
+      return {}
+    } else if (para.length === 1) {
+      return para[0]
+    } else if (para.length === 2) {
+      return para[1]
+    }
+
+    throw new Error('Render only has two parameters')
   }
 
-  static _getView(para, originalUrl) {
-    return new Promise((resolve) => {
-      const urlPieces = originalUrl
-        .split('/')
-        .filter(v => (v ? v !== '' : false))
-        .concat([''])
-      const viewFile = path.join(
-        __dirname,
-        '..',
-        urlPieces[0],
-        'routes',
-        urlPieces[urlPieces.length - 1],
-      )
+  _getViewPath(para, originalUrl) {
+    const urlPieces = originalUrl
+      .split('/')
+      .filter(v => (v ? v !== '' : false))
+      .concat([''])
+    const viewFile = path.join(
+      __dirname,
+      '..',
+      urlPieces[0],
+      'routes',
+      urlPieces[urlPieces.length - 1],
+    )
 
-      const viewBaseName = para.length === 1 || para.length === 0
-        ? path.join(viewFile, urlPieces[1])
-        : path.join(viewFile, para[0])
+    const viewBaseName = para.length === 1 || para.length === 0
+      ? path.join(viewFile, urlPieces[1])
+      : path.join(viewFile, para[0])
 
-      const viewPath = `${viewBaseName}.pug`
+    const viewPath = `${viewBaseName}.pug`
 
-      resolve(viewPath)
-    })
-  }
-
-  static renderViewFile(view, model = undefined) {
-    return new Promise((resolve, reject) => {
-      logger.debug(view, model)
-      fs.readFile(view, (error, template) => {
-        if (error) {
-          reject(error)
-          return
-        }
-
-        const output = model
-          ? pug.render(template, model)
-          : pug.render(template)
-
-        resolve(output)
-      })
-    })
+    return viewPath
   }
 }
 

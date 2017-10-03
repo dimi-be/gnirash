@@ -8,16 +8,8 @@ class GetModel {
    * @param {File[]} files
    */
   constructor(file, files) {
-    this._file = file
-    this._files = files
-  }
-
-  get file() {
-    return this._file
-  }
-
-  get files() {
-    return this._files
+    this.file = file
+    this.files = files
   }
 }
 
