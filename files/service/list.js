@@ -10,7 +10,7 @@ const stat = require('./stat')
  * Returns a list of files and directories in the given directory
  *
  * @param {File} directory
- * @returns {Promise.<File[]>}
+ * @returns {File[]}
  */
 async function list(directory) {
   if (directory.fileType === FileType.root) {

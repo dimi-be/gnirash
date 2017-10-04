@@ -1,4 +1,5 @@
 const path = require('path')
+const settings = require('../domain/settings')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
@@ -7,7 +8,7 @@ class FileDto {
   constructor(file) {
     this.name = file.name
     this.fileType = file.fileType
-    this.virtualPath = path.join('/files', file.virtualPath)
+    this.virtualPath = path.join(`/${settings.name}`, file.virtualPath)
     this.physicalPath = file.physicalPath
     this.virtualPathParent = file.virtualPath === '/'
       ? undefined
@@ -42,7 +43,7 @@ async function createModel(file) {
 
 /**
  * @param {string} virtualPath
- * @returns {Promise.<GetModel>}
+ * @returns {GetModel}
  */
 async function get(virtualPath) {
   let file

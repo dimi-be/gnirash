@@ -1,21 +1,31 @@
 const path = require('path')
+const config = require('../../config')
+const errors = require('../domain/errors')
 
 /**
  * Transforms the physical path into a virtual one
  * on the filesystem.
  *
  * @param {string} physicalPath
- * @return {Promise.<string>}
+ * @return {string}
  */
 async function getVirtualPath(physicalPath) {
-  const currentDirPath = __dirname
-  const rootPath = path.join(currentDirPath, '/../../test-folder')
-  const subPath = physicalPath.substr(rootPath.length)
-  const virtualPath = subPath.charAt(0) === '/'
-    ? subPath
-    : `/${subPath}`
+  let virtualPath
 
-  return Promise.resolve(virtualPath)
+  Object.keys(config.sharedFolders).forEach((name) => {
+    const sharedFolderPath = config.sharedFolders[name]
+
+    if (physicalPath.indexOf(sharedFolderPath) !== -1) {
+      const pathInParent = physicalPath.substr(sharedFolderPath.length)
+      virtualPath = path.join(`/${name}`, pathInParent)
+    }
+  })
+
+  if (virtualPath) {
+    return virtualPath
+  }
+
+  throw new Error(errors.fileNotFound)
 }
 
 module.exports = getVirtualPath

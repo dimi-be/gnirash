@@ -1,5 +1,6 @@
 const router = require('../../infrastructure/router')()
 const FileType = require('../domain/filetype')
+const errors = require('../domain/errors')
 const get = require('./get')
 
 router.get('/*?', async (req, res) => {
@@ -10,7 +11,7 @@ router.get('/*?', async (req, res) => {
   } else if (model.file.fileType === FileType.file) {
     res.download(model.file.physicalPath)
   } else {
-    throw Error(`unkown filetype ${model.file.fileType}`)
+    throw Error(errors.unkowFileType)
   }
 })
 

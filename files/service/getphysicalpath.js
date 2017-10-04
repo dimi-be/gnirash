@@ -1,19 +1,27 @@
 const path = require('path')
+const config = require('../../config')
+const errors = require('../domain/errors')
 
 /**
  * Transforms the virtualPath into a path that exists
  * on the filesystem.
  *
  * @param {string} virtualPath
- * @return {Promise.<string>}
+ * @return {string}
  */
 async function getPhysicalPath(virtualPath) {
-  const currentDirPath = __dirname
-  const physicalPath = virtualPath
-    ? path.join(currentDirPath, '/../../test-folder', virtualPath)
-    : path.join(currentDirPath, '/../../test-folder')
+  const pathPieces = virtualPath.split('/').filter(x => x !== '')
+  const sharedFolderName = pathPieces[0]
+  const sharedFolderPath = config.sharedFolders[sharedFolderName]
 
-  return Promise.resolve(physicalPath)
+  if (!sharedFolderPath) {
+    throw new Error(errors.fileNotFound)
+  }
+
+  const remaingPieces = pathPieces.slice(1)
+  const physicalPath = path.join(sharedFolderPath, ...remaingPieces)
+
+  return physicalPath
 }
 
 module.exports = getPhysicalPath
