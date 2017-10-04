@@ -12,6 +12,7 @@ const stat = require('./stat')
 async function list(directory) {
   const files = await util.promisify(fs.readdir)(directory.physicalPath)
   const stats = files
+    .sort()
     .map(x => path.join(directory.physicalPath, x))
     .map(x => stat(x))
 

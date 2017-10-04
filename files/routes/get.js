@@ -1,39 +1,34 @@
+const path = require('path')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
 
 class FileDto {
-  constructor() {
-    this.name = ''
-    this.fileType = FileType.unknown
-    this.virtualPath = ''
-    this.physicalPath = ''
+  constructor(file) {
+    this.name = file.name
+    this.fileType = file.fileType
+    this.virtualPath = path.join('/files', file.virtualPath)
+    this.physicalPath = file.physicalPath
+    this.virtualPathParent = file.virtualPath === '/'
+      ? undefined
+      : path.join(this.virtualPath, '..')
   }
 }
 
 class GetModel {
   constructor() {
     this.title = 'List'
-    this.file = new FileDto()
+    this.file = {}
     this.files = []
   }
 }
 
 async function createModel(file) {
   const model = new GetModel()
-  model.file.name = file.name
-  model.file.fileType = file.fileType
-  model.file.virtualPath = file.virtualPath
-  model.file.physicalPath = file.physicalPath
+  model.file = new FileDto(file)
 
   if (file.fileType === FileType.directory) {
     const files = await fileService.list(file)
-    model.files = files.map((x) => {
-      const f = new FileDto()
-      f.name = x.name
-      f.fileType = x.fileType
-      f.virtualPath = x.virtualPath
-      return f
-    })
+    model.files = files.map(x => new FileDto(x))
   } else if (file.fileType !== FileType.file) {
     throw new Error(`invalid fileType ${file.fileType}`)
   }

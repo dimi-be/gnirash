@@ -3,6 +3,9 @@ extends ../../views/layout.pug
 block content
   h1 Index of #{file.virtualPath}
   ul
+    if file.virtualPathParent !== undefined
+      li
+        a(href=file.virtualPathParent) Parent Directory
     each file in files
       li
-        a(href='/files' + file.virtualPath) #{file.name}
+        a(href=file.virtualPath) #{file.name}
