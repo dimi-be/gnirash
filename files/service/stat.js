@@ -43,7 +43,7 @@ async function stat(physicalPath) {
     fileType,
     contentType,
     stats.mtime,
-    stats.blksize)
+    stats.size)
 
   return file
 }

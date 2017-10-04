@@ -15,7 +15,11 @@ class Logger {
   }
 
   info(...args) {
-    console.log('I', this._getPrefix(), ...args)
+    console.info('I', this._getPrefix(), ...args)
+  }
+
+  warning(...args) {
+    console.warn('W', this._getPrefix(), ...args)
   }
 
   error(...args) {

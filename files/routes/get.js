@@ -1,6 +1,7 @@
 const path = require('path')
 const dateFormat = require('date-format')
 const fileSize = require('filesize')
+const logger = require('../../infrastructure/logger')
 const settings = require('../domain/settings')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
@@ -20,7 +21,32 @@ class FileDto {
       : path.join(this.virtualPath, '..')
     this.modifiedDate = dateFormat('yyyy-MM-dd hh:ss', file.modifiedDate)
     this.size = fileSize(file.size)
-    this.icon = file.icon
+    this.icon = this.getIcon(file.contentType)
+  }
+
+  getIcon(contentType) {
+    if (this.fileType === FileType.directory || this.fileType === FileType.root) {
+      return 'folder'
+    }
+
+    if (typeof contentType === 'string' && contentType.indexOf('/' !== -1)) {
+      const [type, subType] = contentType.split('/')
+
+      if (type === 'text' || subType === 'pdf') {
+        return 'text'
+      }
+
+      if (type === 'image') {
+        return 'image'
+      }
+
+      if (type === 'video') {
+        return 'movie'
+      }
+    }
+
+    logger.warning(`Can not get icon for ${this.fileType} ${contentType}`)
+    return 'unknown'
   }
 }
 

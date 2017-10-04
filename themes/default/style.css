@@ -1,13 +1,37 @@
+#files th, #files td {
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
 .icon {
-  width: 22px
+  width: 22px;
+  background-repeat: no-repeat;
 }
 
 .icon.back {
-  background-image: url("images/back.gif");
-  background-repeat: no-repeat;
+  background-image: url("images/back.gif")
 }
 
 .icon.folder {
-  background-image: url("images/folder.gif");
-  background-repeat: no-repeat;
+  background-image: url("images/folder.gif")
+}
+
+.icon.image {
+  background-image: url("images/image.gif")
+}
+
+.icon.movie {
+  background-image: url("images/movie.gif")
+}
+
+.icon.sound {
+  background-image: url("images/sound.gif")
+}
+
+.icon.text {
+  background-image: url("images/text.gif")
+}
+
+.icon.unknown {
+  background-image: url("images/unknown.gif")
 }

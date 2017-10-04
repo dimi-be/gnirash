@@ -19,6 +19,9 @@ async function list(directory) {
         config.sharedFolders[name],
         path.join('/', name),
         FileType.directory,
+        false,
+        new Date(1986, 0, 1),
+        0,
       ))
     return files
   }

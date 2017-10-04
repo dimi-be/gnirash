@@ -3,7 +3,7 @@ extends ../../views/layout.pug
 block content
   h1 Index of #{file.virtualPath}
 
-  table
+  table(id='files')
     thead
       tr
         th
@@ -23,7 +23,7 @@ block content
           td
       each f in files
         tr
-          td(class='icon' class=f.icon)
+          td(class=['icon',f.icon])
           td
             a(href=f.virtualPath) #{f.name}
           td=f.modifiedDate

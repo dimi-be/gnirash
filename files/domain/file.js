@@ -13,6 +13,7 @@ class File {
     this._physicalPath = physicalPath
     this._virtualPath = virtualPath
     this._fileType = fileType
+    this._contentType = contentType
     this._modifiedDate = modifiedDate
     this._size = size
   }
@@ -51,6 +52,13 @@ class File {
   }
 
   /**
+   * @type {string}
+   */
+  get contentType() {
+    return this._contentType
+  }
+
+  /**
    * @type {Date}
    */
   get modifiedDate() {
@@ -64,17 +72,8 @@ class File {
     return this._size
   }
 
-
-  get icon() {
-    if (this._fileType === FileType.directory) {
-      return 'folder'
-    }
-
-    return 'unkown'
-  }
-
   static get root() {
-    return new File('', '/', FileType.root)
+    return new File('', '/', FileType.root, false, new Date(1986, 0, 1), 0)
   }
 }
 
