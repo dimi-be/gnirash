@@ -1,3 +1,5 @@
+const FileType = require('./filetype')
+
 class File {
   constructor(physicalPath, virtualPath, fileType) {
     this._physicalPath = physicalPath
@@ -24,6 +26,10 @@ class File {
     return pathPieces.length === 0
       ? '/'
       : pathPieces[pathPieces.length - 1]
+  }
+
+  static get root() {
+    return new File('', '/', FileType.root)
   }
 }
 

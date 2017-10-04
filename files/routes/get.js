@@ -1,4 +1,5 @@
 const path = require('path')
+const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
 
@@ -22,11 +23,14 @@ class GetModel {
   }
 }
 
+/**
+ * @param {File} file
+ */
 async function createModel(file) {
   const model = new GetModel()
   model.file = new FileDto(file)
 
-  if (file.fileType === FileType.directory) {
+  if (file.fileType === FileType.directory || file.fileType === FileType.root) {
     const files = await fileService.list(file)
     model.files = files.map(x => new FileDto(x))
   } else if (file.fileType !== FileType.file) {
@@ -41,8 +45,14 @@ async function createModel(file) {
  * @returns {Promise.<GetModel>}
  */
 async function get(virtualPath) {
-  const physicalPath = await fileService.getPhysicalPath(virtualPath)
-  const file = await fileService.stat(physicalPath)
+  let file
+
+  if (!virtualPath || virtualPath === '/') {
+    file = File.root
+  } else {
+    const physicalPath = await fileService.getPhysicalPath(virtualPath)
+    file = await fileService.stat(physicalPath)
+  }
 
   return createModel(file)
 }

@@ -7,6 +7,10 @@ class FileType {
     return 'file'
   }
 
+  static get root() {
+    return 'root'
+  }
+
   static get unknown() {
     return 'unknown'
   }
