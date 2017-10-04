@@ -21,7 +21,7 @@ function getFileType(stats) {
  * Get a file based on the physical (real) path given
  *
  * @param {string} physicalPath
- * @return {Promise.<File>}
+ * @return {File}
  */
 async function stat(physicalPath) {
   logger.debug(physicalPath)
@@ -34,7 +34,14 @@ async function stat(physicalPath) {
   }
 
   const virtualPath = await getVirtualPath(physicalPath)
-  return new File(physicalPath, virtualPath, fileType)
+  const file = new File(
+    physicalPath,
+    virtualPath,
+    fileType,
+    stats.mtime,
+    stats.blksize)
+
+  return file
 }
 
 module.exports = stat

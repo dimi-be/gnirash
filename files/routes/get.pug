@@ -2,10 +2,29 @@ extends ../../views/layout.pug
 
 block content
   h1 Index of #{file.virtualPath}
-  ul
-    if file.virtualPathParent !== undefined
-      li
-        a(href=file.virtualPathParent) Parent Directory
-    each file in files
-      li
-        a(href=file.virtualPath) #{file.name}
+
+  table
+    thead
+      tr
+        th
+        th Name
+        th Last Modified
+        th Size
+      tr
+        td(colspan=4)
+          hr
+      tbody
+        if file.virtualPathParent !== undefined
+          tr
+            td
+            td
+              a(href=file.virtualPathParent) Parent Directory
+            td
+            td
+        each f in files
+          tr
+            td
+            td
+              a(href=f.virtualPath) #{f.name}
+            td=f.modifiedDate
+            td=f.size

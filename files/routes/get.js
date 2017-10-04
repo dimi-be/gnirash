@@ -1,10 +1,15 @@
 const path = require('path')
+const dateFormat = require('date-format')
+const fileSize = require('filesize')
 const settings = require('../domain/settings')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
 
 class FileDto {
+  /**
+   * @param {File} file
+   */
   constructor(file) {
     this.name = file.name
     this.fileType = file.fileType
@@ -13,6 +18,8 @@ class FileDto {
     this.virtualPathParent = file.virtualPath === '/'
       ? undefined
       : path.join(this.virtualPath, '..')
+    this.modifiedDate = dateFormat('yyyy-MM-dd hh:ss', file.modifiedDate)
+    this.size = fileSize(file.size)
   }
 }
 
