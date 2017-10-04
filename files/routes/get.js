@@ -20,6 +20,7 @@ class FileDto {
       : path.join(this.virtualPath, '..')
     this.modifiedDate = dateFormat('yyyy-MM-dd hh:ss', file.modifiedDate)
     this.size = fileSize(file.size)
+    this.icon = file.icon
   }
 }
 

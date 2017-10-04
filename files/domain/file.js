@@ -5,10 +5,11 @@ class File {
    * @param {string} physicalPath
    * @param {string} virtualPath
    * @param {FileType} fileType
+   * @param {string} contentType
    * @param {Date} modifiedDate
    * @param {number} size
    */
-  constructor(physicalPath, virtualPath, fileType, modifiedDate, size) {
+  constructor(physicalPath, virtualPath, fileType, contentType, modifiedDate, size) {
     this._physicalPath = physicalPath
     this._virtualPath = virtualPath
     this._fileType = fileType
@@ -61,6 +62,15 @@ class File {
    */
   get size() {
     return this._size
+  }
+
+
+  get icon() {
+    if (this._fileType === FileType.directory) {
+      return 'folder'
+    }
+
+    return 'unkown'
   }
 
   static get root() {

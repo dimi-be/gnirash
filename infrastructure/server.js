@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const config = require('../config')
 const logger = require('../infrastructure/logger')
@@ -22,5 +23,9 @@ app.use('/files', filesRoutes)
 
 logger.info('Adding middleware')
 logger.configure(app)
+
+logger.info('Adding static files')
+const themesPath = path.join(__dirname, '..', 'themes')
+app.use('/themes', express.static(themesPath))
 
 module.exports = app

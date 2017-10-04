@@ -1,0 +1,13 @@
+.icon {
+  width: 22px
+}
+
+.icon.back {
+  background-image: url("images/back.gif");
+  background-repeat: no-repeat;
+}
+
+.icon.folder {
+  background-image: url("images/folder.gif");
+  background-repeat: no-repeat;
+}

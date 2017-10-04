@@ -13,18 +13,18 @@ block content
       tr
         td(colspan=4)
           hr
-      tbody
-        if file.virtualPathParent !== undefined
-          tr
-            td
-            td
-              a(href=file.virtualPathParent) Parent Directory
-            td
-            td
-        each f in files
-          tr
-            td
-            td
-              a(href=f.virtualPath) #{f.name}
-            td=f.modifiedDate
-            td=f.size
+    tbody
+      if file.virtualPathParent !== undefined
+        tr
+          td(class='icon back')
+          td
+            a(href=file.virtualPathParent) Parent Directory
+          td
+          td
+      each f in files
+        tr
+          td(class='icon' class=f.icon)
+          td
+            a(href=f.virtualPath) #{f.name}
+          td=f.modifiedDate
+          td=f.size

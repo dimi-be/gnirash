@@ -23,6 +23,7 @@
     "error-stack-parser": "^2.0.1",
     "express": "^4.16.0",
     "filesize": "^3.5.10",
+    "mime-types": "^2.1.17",
     "pug": "^2.0.0-rc.4"
   }
 }

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const util = require('util')
+const mime = require('mime-types')
 const logger = require('../../infrastructure/logger')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
@@ -34,10 +35,13 @@ async function stat(physicalPath) {
   }
 
   const virtualPath = await getVirtualPath(physicalPath)
+  const contentType = mime.lookup(physicalPath)
+
   const file = new File(
     physicalPath,
     virtualPath,
     fileType,
+    contentType,
     stats.mtime,
     stats.blksize)
 
