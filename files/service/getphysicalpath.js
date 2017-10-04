@@ -7,13 +7,13 @@ const path = require('path')
  * @param {string} virtualPath
  * @return {Promise.<string>}
  */
-async function getAbsolutePath(virtualPath) {
+async function getPhysicalPath(virtualPath) {
   const currentDirPath = __dirname
-  const absolutePath = virtualPath
+  const physicalPath = virtualPath
     ? path.join(currentDirPath, '/../../test-folder', virtualPath)
     : path.join(currentDirPath, '/../../test-folder')
 
-  return Promise.resolve(absolutePath)
+  return Promise.resolve(physicalPath)
 }
 
-module.exports = getAbsolutePath
+module.exports = getPhysicalPath

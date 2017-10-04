@@ -18,23 +18,23 @@ function getFileType(stats) {
 }
 
 /**
- * Get a file based on the absolute (real) path given
+ * Get a file based on the physical (real) path given
  *
- * @param {string} absolutePath
+ * @param {string} physicalPath
  * @return {Promise.<File>}
  */
-async function stat(absolutePath) {
-  logger.debug(absolutePath)
+async function stat(physicalPath) {
+  logger.debug(physicalPath)
 
-  const stats = await util.promisify(fs.stat)(absolutePath)
+  const stats = await util.promisify(fs.stat)(physicalPath)
   const fileType = getFileType(stats)
 
   if (fileType === FileType.unknown) {
     throw new Error('unkown file type')
   }
 
-  const virtualPath = await getVirtualPath(absolutePath)
-  return new File(absolutePath, virtualPath, fileType)
+  const virtualPath = await getVirtualPath(physicalPath)
+  return new File(physicalPath, virtualPath, fileType)
 }
 
 module.exports = stat

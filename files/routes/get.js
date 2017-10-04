@@ -6,7 +6,7 @@ class FileDto {
     this.name = ''
     this.fileType = FileType.unknown
     this.virtualPath = ''
-    this.absolutePath = ''
+    this.physicalPath = ''
   }
 }
 
@@ -23,7 +23,7 @@ async function createModel(file) {
   model.file.name = file.name
   model.file.fileType = file.fileType
   model.file.virtualPath = file.virtualPath
-  model.file.absolutePath = file.absolutePath
+  model.file.physicalPath = file.physicalPath
 
   if (file.fileType === FileType.directory) {
     const files = await fileService.list(file)
@@ -46,8 +46,8 @@ async function createModel(file) {
  * @returns {Promise.<GetModel>}
  */
 async function get(virtualPath) {
-  const absolutePath = await fileService.getAbsolutePath(virtualPath)
-  const file = await fileService.stat(absolutePath)
+  const physicalPath = await fileService.getPhysicalPath(virtualPath)
+  const file = await fileService.stat(physicalPath)
 
   return createModel(file)
 }

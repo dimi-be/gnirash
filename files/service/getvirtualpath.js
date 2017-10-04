@@ -1,16 +1,16 @@
 const path = require('path')
 
 /**
- * Transforms the absolute path into a virtual one
+ * Transforms the physical path into a virtual one
  * on the filesystem.
  *
- * @param {string} absolutePath
+ * @param {string} physicalPath
  * @return {Promise.<string>}
  */
-async function getVirtualPath(absolutePath) {
+async function getVirtualPath(physicalPath) {
   const currentDirPath = __dirname
   const rootPath = path.join(currentDirPath, '/../../test-folder')
-  const subPath = absolutePath.substr(rootPath.length)
+  const subPath = physicalPath.substr(rootPath.length)
   const virtualPath = subPath.charAt(0) === '/'
     ? subPath
     : `/${subPath}`

@@ -1,12 +1,12 @@
 class File {
-  constructor(absolutePath, virtualPath, fileType) {
-    this._absolutePath = absolutePath
+  constructor(physicalPath, virtualPath, fileType) {
+    this._physicalPath = physicalPath
     this._virtualPath = virtualPath
     this._fileType = fileType
   }
 
-  get absolutePath() {
-    return this._absolutePath
+  get physicalPath() {
+    return this._physicalPath
   }
 
   get virtualPath() {

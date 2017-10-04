@@ -1,11 +1,11 @@
 const list = require('./list')
 const stat = require('./stat')
-const getAbsolutePath = require('./getabsolutepath')
+const getPhysicalPath = require('./getphysicalpath')
 const getVirtualPath = require('./getvirtualpath')
 
 module.exports = {
   list,
   stat,
-  getAbsolutePath,
+  getPhysicalPath,
   getVirtualPath,
 }

@@ -10,9 +10,9 @@ const stat = require('./stat')
  * @returns {Promise.<File[]>}
  */
 async function list(directory) {
-  const files = await util.promisify(fs.readdir)(directory.absolutePath)
+  const files = await util.promisify(fs.readdir)(directory.physicalPath)
   const stats = files
-    .map(x => path.join(directory.absolutePath, x))
+    .map(x => path.join(directory.physicalPath, x))
     .map(x => stat(x))
 
   return Promise.all(stats)
