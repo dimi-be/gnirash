@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+const logger = require('../infrastructure/logger')
 
 const asyncMiddleware = fn =>
 (req, res, next) => {
@@ -22,6 +23,13 @@ function configure(router) {
   }
 }
 
+function middleware() {
+  return (err, req, res, n) => {
+    this._logRequestError(err, req, res, n)
+  }
+}
+
 module.exports = {
   configure,
+  middleware,
 }

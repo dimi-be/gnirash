@@ -3,11 +3,8 @@ const errorStackParser = require('error-stack-parser')
 const dateTime = require('date-time')
 
 class Logger {
-  configure(app) {
-    app.use((...args) => this._logRequest(...args))
-    app.use((err, req, res, n) => {
-      this._logRequestError(err, req, res, n)
-    })
+  middleware() {
+    return (...args) => this._logRequest(...args)
   }
 
   debug(...args) {
@@ -53,7 +50,7 @@ class Logger {
   _getPrefix() {
     const dateTimeString = dateTime()
     const callerInfo = this._getCallerInfo()
-    return `${dateTimeString} ${callerInfo}`
+    return `${dateTimeString} ${callerInfo}():`
   }
 }
 

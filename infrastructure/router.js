@@ -1,12 +1,16 @@
 const express = require('express')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const render = require('./render')
 const errorHandling = require('./errorhandling')
-const bodyParser = require('body-parser')
+const authentication = require('./authentication')
 
 module.exports = () => {
   const router = express.Router()
-  router.use(bodyParser.urlencoded({ extended: false }))
   errorHandling.configure(router)
-  render.configure(router)
+  router.use(render.middleware())
+  router.use(bodyParser.urlencoded({ extended: false }))
+  router.use(cookieParser())
+  router.use(authentication.middleware())
   return router
 }
