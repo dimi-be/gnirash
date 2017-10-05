@@ -18,11 +18,13 @@
     "eslint-plugin-import": "^2.2.0"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "date-format": "^1.1.0",
     "date-time": "^2.1.0",
     "error-stack-parser": "^2.0.1",
     "express": "^4.16.0",
     "filesize": "^3.5.10",
+    "jsonwebtoken": "^8.0.1",
     "mime-types": "^2.1.17",
     "pug": "^2.0.0-rc.4"
   }
