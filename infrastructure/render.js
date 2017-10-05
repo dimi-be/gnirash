@@ -35,7 +35,7 @@ function getModel(para) {
 }
 
 function customRender(response, render, ...args) {
-  const viewPath = getViewPath(args, response.req.originalUrl)
+  const viewPath = getViewPath(args, response.req.baseUrl)
   const model = getModel(args)
   render.call(response, viewPath, model)
 }

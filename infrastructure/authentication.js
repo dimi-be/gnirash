@@ -3,12 +3,19 @@ const jwt = require('jsonwebtoken')
 const config = require('../config')
 const logger = require('./logger')
 
+const errors = {
+  invalidCredentials: 'invalidCredentials',
+  unauthenticated: 'unauthenticated',
+}
+
 async function authenticate(key, res) {
   const user = config.users
     .filter(u => u.key === key)[0]
 
   if (!user) {
-    throw new Error('User not found')
+    logger.warning(errors.invalidCredentials)
+    res.clearCookie('jwt')
+    res.redirect(`/login?error=${errors.invalidCredentials}`)
   }
 
   const keyHash = crypto.createHash('sha256')
@@ -50,16 +57,17 @@ async function authenticateRequest(req, res, next) {
     req.claims = newClaims
     next()
   } catch (e) {
+    logger.debug(e)
+    logger.warning('User not authenticated')
+
     if (req.cookies.jwt) {
       res.clearCookie('jwt')
     }
 
-    if (req.baseUrl === '/login') {
-      logger.warning('User not authenticated')
-      next()
+    if (req.baseUrl !== '/login') {
+      res.redirect(`/login?error=${errors.unauthenticated}`)
     } else {
-      logger.error(e)
-      next(e)
+      next()
     }
   }
 }
@@ -71,4 +79,5 @@ function middleware() {
 module.exports = {
   middleware,
   authenticate,
+  errors,
 }

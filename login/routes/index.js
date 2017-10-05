@@ -1,7 +1,7 @@
 const router = require('../../infrastructure/router')()
 const authentication = require('../../infrastructure/authentication')
 
-router.get('/', async (req, res) => {
+router.get('/?', async (req, res) => {
   res.render('login')
 })
 
