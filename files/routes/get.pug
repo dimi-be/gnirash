@@ -15,16 +15,14 @@ block content
           hr
     tbody
       if file.virtualPathParent !== undefined
-        tr
-          td(class='icon back')
-          td
-            a(href=file.virtualPathParent) Parent Directory
-          td
-          td
+        +file('back', file.virtualPathParent, 'Parent Directory', '', '')
       each f in files
-        tr
-          td(class=['icon',f.icon])
-          td
-            a(href=f.virtualPath) #{f.name}
-          td=f.modifiedDate
-          td=f.size
+        +file(f.icon, f.virtualPath, f.name, f.modifiedDate, f.size)
+
+mixin file(icon, virtualPath, name, modifiedDate, size)
+  tr
+    td(class=['icon',icon])
+    td
+      a(href=virtualPath) #{name}
+    td=modifiedDate
+    td=size
