@@ -12,5 +12,11 @@ module.exports = {
       path: path.join(__dirname, 'testdata/test-foobar'),
     },
   ],
+  users: [
+    {
+      name: 'test',
+      key: '007',
+    },
+  ],
   secret: "We can't stop here! This is bat country!!",
 }

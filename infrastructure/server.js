@@ -3,6 +3,7 @@ const express = require('express')
 const config = require('../config')
 const logger = require('../infrastructure/logger')
 const filesRoutes = require('../files/routes')
+const loginRoutes = require('../login/routes')
 
 logger.info('Setting up express')
 
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 
 logger.info('Adding routes')
 app.use('/files', filesRoutes)
+app.use('/login', loginRoutes)
 
 logger.info('Adding middleware')
 logger.configure(app)

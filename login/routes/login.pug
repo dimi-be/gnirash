@@ -1,0 +1,9 @@
+extends ../../views/layout.pug
+
+block content
+  fieldset#login
+    legend Login
+    form(action="/login", method="post")
+      label(for="key") Key
+      input(type="text" name="key")
+      input(type="submit" value="Login")

@@ -3,7 +3,6 @@ const dateFormat = require('date-format')
 const fileSize = require('filesize')
 const logger = require('../../infrastructure/logger')
 const settings = require('../domain/settings')
-const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const fileService = require('../service')
 

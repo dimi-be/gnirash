@@ -23,7 +23,7 @@ class Render {
   }
 
   _getModel(para) {
-    if (para.length === 0) {
+    if (para.length === 0 || (para.length === 1 || typeof para[0] === 'string')) {
       return {}
     } else if (para.length === 1) {
       return para[0]
@@ -37,7 +37,7 @@ class Render {
   _getViewPath(para, originalUrl) {
     const urlPieces = originalUrl
       .split('/')
-      .filter(v => (v ? v !== '' : false))
+      .filter(v => (v !== ''))
       .concat([''])
     const viewFile = path.join(
       __dirname,
@@ -47,7 +47,7 @@ class Render {
       urlPieces[urlPieces.length - 1],
     )
 
-    const viewBaseName = para.length === 1 || para.length === 0
+    const viewBaseName = (para.length === 1 && typeof para[0] !== 'string') || para.length === 0
       ? path.join(viewFile, urlPieces[1])
       : path.join(viewFile, para[0])
 
