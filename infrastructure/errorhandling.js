@@ -1,6 +1,4 @@
 /* eslint-disable no-param-reassign */
-const logger = require('../infrastructure/logger')
-
 const asyncMiddleware = fn =>
 (req, res, next) => {
   Promise.resolve(fn(req, res, next))
@@ -17,9 +15,14 @@ const asyncMiddleware = fn =>
  */
 function configure(router) {
   const get = router.get
+  const post = router.post
 
   router.get = (path, fn) => {
     get.call(router, path, asyncMiddleware(fn))
+  }
+
+  router.post = (path, fn) => {
+    post.call(router, path, asyncMiddleware(fn))
   }
 }
 

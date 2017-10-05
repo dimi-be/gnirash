@@ -13,9 +13,8 @@ async function authenticate(key, res) {
     .filter(u => u.key === key)[0]
 
   if (!user) {
-    logger.warning(errors.invalidCredentials)
-    res.clearCookie('jwt')
-    res.redirect(`/login?error=${errors.invalidCredentials}`)
+    logger.warning(errors.invalidCredentials, key)
+    throw new Error(errors.invalidCredentials)
   }
 
   const keyHash = crypto.createHash('sha256')
@@ -34,6 +33,7 @@ async function authenticate(key, res) {
     maxAge: 365 * 24 * 60 * 60 * 1000,
   })
 
+  logger.info('User authenticated', claims.name)
   return token
 }
 
@@ -60,11 +60,8 @@ async function authenticateRequest(req, res, next) {
     logger.debug(e)
     logger.warning('User not authenticated')
 
-    if (req.cookies.jwt) {
-      res.clearCookie('jwt')
-    }
-
     if (req.baseUrl !== '/login') {
+      res.clearCookie('jwt')
       res.redirect(`/login?error=${errors.unauthenticated}`)
     } else {
       next()
