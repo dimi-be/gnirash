@@ -80,15 +80,7 @@ async function createModel(file) {
  * @returns {GetModel}
  */
 async function get(virtualPath) {
-  let file
-
-  if (!virtualPath || virtualPath === '/') {
-    file = File.root
-  } else {
-    const physicalPath = await fileService.getPhysicalPath(virtualPath)
-    file = await fileService.stat(physicalPath)
-  }
-
+  const file = await fileService.stat(virtualPath)
   return createModel(file)
 }
 

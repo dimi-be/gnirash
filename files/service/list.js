@@ -14,10 +14,10 @@ const stat = require('./stat')
  */
 async function list(directory) {
   if (directory.fileType === FileType.root) {
-    const files = Object.keys(config.sharedFolders)
-      .map(name => new File(
-        config.sharedFolders[name],
-        path.join('/', name),
+    const files = config.sharedFolders
+      .map(folder => new File(
+        folder.path,
+        path.join('/', folder.name),
         FileType.directory,
         false,
         new Date(1986, 0, 1),
@@ -29,7 +29,7 @@ async function list(directory) {
   const files = await util.promisify(fs.readdir)(directory.physicalPath)
   const stats = files
     .sort()
-    .map(x => path.join(directory.physicalPath, x))
+    .map(x => path.join(directory.virtualPath, x))
     .map(x => stat(x))
 
   return Promise.all(stats)

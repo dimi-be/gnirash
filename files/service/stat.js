@@ -1,10 +1,36 @@
 const fs = require('fs')
+const path = require('path')
 const util = require('util')
 const mime = require('mime-types')
+const config = require('../../config')
 const logger = require('../../infrastructure/logger')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
-const getVirtualPath = require('../service/getvirtualpath')
+const errors = require('../domain/errors')
+
+/**
+ * Transforms the virtualPath into a path that exists
+ * on the filesystem.
+ *
+ * @param {string} virtualPath
+ * @return {string}
+ */
+async function getPhysicalPath(virtualPath) {
+  const pathPieces = virtualPath.split('/').filter(x => x !== '')
+  const sharedFolderName = pathPieces[0]
+  const sharedFolderPath = config.sharedFolders
+    .filter(x => x.name === sharedFolderName)[0].path
+
+  if (!sharedFolderPath) {
+    throw new Error(errors.fileNotFound)
+  }
+
+  const remaingPieces = pathPieces.slice(1)
+  const physicalPath = path.join(sharedFolderPath, ...remaingPieces)
+
+  logger.debug('physicalPath=', physicalPath)
+  return physicalPath
+}
 
 function getFileType(stats) {
   if (stats.isDirectory()) {
@@ -21,12 +47,17 @@ function getFileType(stats) {
 /**
  * Get a file based on the physical (real) path given
  *
- * @param {string} physicalPath
+ * @param {string} virtualPath
  * @return {File}
  */
-async function stat(physicalPath) {
-  logger.debug(physicalPath)
+async function stat(virtualPath) {
+  logger.debug(virtualPath)
 
+  if (!virtualPath || virtualPath === '/') {
+    return File.root
+  }
+
+  const physicalPath = await getPhysicalPath(virtualPath)
   const stats = await util.promisify(fs.stat)(physicalPath)
   const fileType = getFileType(stats)
 
@@ -34,7 +65,6 @@ async function stat(physicalPath) {
     throw new Error('unkown file type')
   }
 
-  const virtualPath = await getVirtualPath(physicalPath)
   const contentType = mime.lookup(physicalPath)
 
   const file = new File(
