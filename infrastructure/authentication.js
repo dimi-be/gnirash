@@ -14,6 +14,11 @@ async function setSessionCookie(res, token) {
   })
 }
 
+async function logout(res, req) {
+  res.clearCookie('jwt')
+  req.claims = { loggedIn: false }
+}
+
 async function authenticate(key) {
   const user = config.users
     .filter(u => u.key === key)[0]
@@ -65,8 +70,7 @@ async function authenticateRequest(req, res, next) {
     logger.warning('User not authenticated')
 
     if (req.baseUrl !== '/login') {
-      res.clearCookie('jwt')
-      req.claims = { loggedIn: false }
+      logout(res, req)
       next(new Error(errors.unauthenticated))
     } else {
       next()
@@ -82,5 +86,6 @@ module.exports = {
   middleware,
   authenticate,
   setSessionCookie,
+  logout,
   errors,
 }

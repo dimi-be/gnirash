@@ -31,18 +31,20 @@ async function post(key) {
   )
 }
 
-async function get(error, claims) {
+async function get(message, claims) {
   const token = undefined
   const loggedIn = claims ? claims.loggedIn : false
   let infoMessage = ''
   let errorMessage = ''
 
-  if (loggedIn && !error) {
+  if (loggedIn && !message) {
     infoMessage = `You are already logged in as ${claims.name}`
-  } else if (!loggedIn && !error) {
+  } else if (!loggedIn && !message) {
     infoMessage = getMessageFromError(authentication.errors.unauthenticated)
+  } else if (message && message === 'loggedOut') {
+    infoMessage = 'You have succesfully logged out.'
   } else {
-    errorMessage = getMessageFromError(error)
+    errorMessage = getMessageFromError(message)
   }
 
   return new LoginModel(

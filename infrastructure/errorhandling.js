@@ -5,10 +5,10 @@ const authentication = require('./authentication')
 function handleKnownErrors(error, req, res, next) {
   switch (error.message) {
     case authentication.errors.invalidCredentials:
-      res.redirect(`/login?error=${error.message}`)
+      res.redirect(`/login?message=${error.message}`)
       break
     case authentication.errors.unauthenticated:
-      res.redirect(`/login?error=${error.message}`)
+      res.redirect(`/login?message=${error.message}`)
       break
     default:
       next()

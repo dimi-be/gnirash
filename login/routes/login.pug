@@ -1,19 +1,22 @@
 extends ../../views/layout.pug
 
 block content
-  h2 Login
-  fieldset#loginForm
-    legend Login
+  #login
+    fieldset
+      legend Login
 
-    #messages
-      if infoMessage
-        .info=infoMessage
-      if errorMessage
-        .error=errorMessage
+      #messages
+        if infoMessage
+          .info=infoMessage
+        if errorMessage
+          .error=errorMessage
 
-    form(action="/login", method="post")
-      div
-        label(for="key") Key
-        input(type="text" name="key")
-      div
-        input(type="submit" value="Login")
+      form(action="/login" method="post")
+        if !loggedIn
+          div
+            input(type="text" name="key" placeholder="Key")
+          div
+            button(type="submit" value="login" name="action") Login
+        else
+          div
+            button(type="submit" value="logout" name="action") Logout

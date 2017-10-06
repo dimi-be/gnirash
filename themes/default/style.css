@@ -38,10 +38,12 @@
 }
 
 /* Login */
-#loginForm label, #loginForm input[type=submit] {
-  display: inline-block;
-  width: 80px;
-  margin-right: 8px;
+#login fieldset {
+  width: 50%;
+  min-width: 400px;
+  max-width: 600px;
+  margin: auto;
+  padding: 6 10 6 10;
 }
 
 #messages {
@@ -52,3 +54,17 @@
 #messages .error {
   color: darkred
 }
+
+#login form div {
+  margin-bottom: 4px
+}
+
+#login input {
+  width: 100%
+}
+
+#login button {
+  display: block;
+  margin: auto;
+}
+
