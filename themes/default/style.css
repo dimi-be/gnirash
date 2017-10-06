@@ -1,3 +1,4 @@
+/* List */
 #files th, #files td {
   padding-right: 4px;
   padding-left: 4px;
@@ -34,4 +35,20 @@
 
 .icon.unknown {
   background-image: url("images/unknown.gif")
+}
+
+/* Login */
+#loginForm label, #loginForm input[type=submit] {
+  display: inline-block;
+  width: 80px;
+  margin-right: 8px;
+}
+
+#messages {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#messages .error {
+  color: darkred
 }

@@ -1,10 +1,11 @@
 const authentication = require('../../infrastructure/authentication')
 
 class LoginModel {
-  constructor(token, loggedIn, message) {
+  constructor(token, loggedIn, infoMessage, errorMessage) {
     this.token = token
     this.loggedIn = loggedIn
-    this.message = message
+    this.infoMessage = infoMessage
+    this.errorMessage = errorMessage
   }
 }
 
@@ -33,20 +34,22 @@ async function post(key) {
 async function get(error, claims) {
   const token = undefined
   const loggedIn = claims ? claims.loggedIn : false
-  let message
+  let infoMessage = ''
+  let errorMessage = ''
 
   if (loggedIn && !error) {
-    message = `You are already logged in as ${claims.name}`
+    infoMessage = `You are already logged in as ${claims.name}`
   } else if (!loggedIn && !error) {
-    message = getMessageFromError(authentication.errors.unauthenticated)
+    infoMessage = getMessageFromError(authentication.errors.unauthenticated)
   } else {
-    message = getMessageFromError(error)
+    errorMessage = getMessageFromError(error)
   }
 
   return new LoginModel(
     token,
     loggedIn,
-    message,
+    infoMessage,
+    errorMessage,
   )
 }
 
