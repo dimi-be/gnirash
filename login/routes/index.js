@@ -6,16 +6,8 @@ router.get('/?', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  try {
-    await authentication.authenticate(req.body.key, res)
-    res.render('login')
-  } catch (e) {
-    if (e.message === authentication.errors.invalidCredentials) {
-      res.redirect(`/login?error=${e.message}`)
-    } else {
-      throw e
-    }
-  }
+  await authentication.authenticate(req.body.key, res)
+  res.render('login')
 })
 
 module.exports = router

@@ -35,8 +35,8 @@ function addStaticRoutes(app) {
 
 function addMiddleware(app) {
   logger.info('Adding middleware')
-  app.use(errorHandling.middleware)
   app.use(logger.middleware)
+  app.use(errorHandling.middleware)
 }
 
 function setup() {

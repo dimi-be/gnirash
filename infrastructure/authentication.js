@@ -24,7 +24,7 @@ async function authenticate(key, res) {
   const claims = {
     name: user.name,
     keyHash,
-    exp: Math.floor(Date.now() / 1000) + (15 * 60),
+    expiresIn: '1 year',
   }
 
   const token = jwt.sign(claims, config.secret)
@@ -62,7 +62,7 @@ async function authenticateRequest(req, res, next) {
 
     if (req.baseUrl !== '/login') {
       res.clearCookie('jwt')
-      res.redirect(`/login?error=${errors.unauthenticated}`)
+      next(new Error(errors.unauthenticated))
     } else {
       next()
     }

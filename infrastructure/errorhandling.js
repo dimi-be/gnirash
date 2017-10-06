@@ -1,4 +1,20 @@
 /* eslint-disable no-param-reassign */
+const logger = require('./logger')
+const authentication = require('./authentication')
+
+function handleKnownErrors(error, req, res, next) {
+  switch (error.message) {
+    case authentication.errors.invalidCredentials:
+      res.redirect(`/login?error=${error.message}`)
+      break
+    case authentication.errors.unauthenticated:
+      res.redirect(`/login?error=${error.message}`)
+      break
+    default:
+      next()
+  }
+}
+
 const asyncMiddleware = fn =>
 (req, res, next) => {
   Promise.resolve(fn(req, res, next))
@@ -27,8 +43,14 @@ function configure(router) {
 }
 
 function middleware() {
-  return (err, req, res, n) => {
-    this._logRequestError(err, req, res, n)
+  return (err, req, res, next) => {
+    logger.error(err)
+
+    if (err && err.message) {
+      handleKnownErrors(err, req, res, next)
+    } else {
+      next(err)
+    }
   }
 }
 
