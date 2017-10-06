@@ -14,6 +14,5 @@ module.exports = () => {
   router.use(bodyParser.urlencoded({ extended: false }))
   router.use(cookieParser())
   router.use(authentication.middleware())
-  router.use(errorHandling.middleware())
   return router
 }

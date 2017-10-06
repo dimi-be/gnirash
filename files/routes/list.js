@@ -49,7 +49,7 @@ class FileDto {
   }
 }
 
-class GetModel {
+class ListModel {
   constructor() {
     this.title = 'List'
     this.file = {}
@@ -61,7 +61,7 @@ class GetModel {
  * @param {File} file
  */
 async function createModel(file) {
-  const model = new GetModel()
+  const model = new ListModel()
   model.file = new FileDto(file)
 
   if (file.fileType === FileType.directory || file.fileType === FileType.root) {
@@ -83,4 +83,6 @@ async function get(virtualPath) {
   return createModel(file)
 }
 
-module.exports = get
+module.exports = {
+  get,
+}

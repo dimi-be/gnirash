@@ -8,7 +8,13 @@ const errors = {
   unauthenticated: 'unauthenticated',
 }
 
-async function authenticate(key, res) {
+async function setSessionCookie(res, token) {
+  res.cookie('jwt', token, {
+    maxAge: 365 * 24 * 60 * 60 * 1000,
+  })
+}
+
+async function authenticate(key) {
   const user = config.users
     .filter(u => u.key === key)[0]
 
@@ -23,15 +29,12 @@ async function authenticate(key, res) {
 
   const claims = {
     name: user.name,
+    loggedIn: true,
     keyHash,
     expiresIn: '1 year',
   }
 
   const token = jwt.sign(claims, config.secret)
-
-  res.cookie('jwt', token, {
-    maxAge: 365 * 24 * 60 * 60 * 1000,
-  })
 
   logger.info('User authenticated', claims.name)
   return token
@@ -52,9 +55,10 @@ async function authenticateRequest(req, res, next) {
     // After the user is verified we authenticate him again because
     // sessions last 1 year, so maybe the user was removed or modified.
     const key = getKeyFromHash(claims.keyHash)
-    const newToken = await authenticate(key, res)
+    const newToken = await authenticate(key)
     const newClaims = jwt.verify(newToken, config.secret)
     req.claims = newClaims
+    await setSessionCookie(res, newToken)
     next()
   } catch (e) {
     logger.debug(e)
@@ -62,6 +66,7 @@ async function authenticateRequest(req, res, next) {
 
     if (req.baseUrl !== '/login') {
       res.clearCookie('jwt')
+      req.claims = { loggedIn: false }
       next(new Error(errors.unauthenticated))
     } else {
       next()
@@ -76,5 +81,6 @@ function middleware() {
 module.exports = {
   middleware,
   authenticate,
+  setSessionCookie,
   errors,
 }

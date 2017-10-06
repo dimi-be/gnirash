@@ -30,7 +30,7 @@ class Logger {
 
   _logRequestError(error, request, response, next) {
     this.error(error)
-    next()
+    next(error)
   }
 
   /* eslint-disable class-methods-use-this  */
