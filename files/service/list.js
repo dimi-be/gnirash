@@ -1,7 +1,7 @@
 const fs = require('fs')
 const util = require('util')
 const path = require('path')
-const config = require('../../config')
+const config = require('../../infrastructure/config')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const stat = require('./stat')
@@ -14,7 +14,7 @@ const stat = require('./stat')
  */
 async function list(directory) {
   if (directory.fileType === FileType.root) {
-    const files = config.sharedFolders
+    const files = config.folders
       .map(folder => new File(
         folder.path,
         path.join('/', folder.name),

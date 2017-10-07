@@ -3,9 +3,11 @@ html
     title #{siteTitle} - #{title}
     link(rel='stylesheet',type='text/css',href='/themes/default/style.css')
   body
-    h1=siteTitle
+    header
+      h1=siteTitle
 
-    block content
+    #content
+      block content
 
     footer
       hr

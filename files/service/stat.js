@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const util = require('util')
 const mime = require('mime-types')
-const config = require('../../config')
+const config = require('../../infrastructure/config')
 const logger = require('../../infrastructure/logger')
 const File = require('../domain/file')
 const FileType = require('../domain/filetype')
@@ -18,7 +18,7 @@ const errors = require('../domain/errors')
 async function getPhysicalPath(virtualPath) {
   const pathPieces = virtualPath.split('/').filter(x => x !== '')
   const sharedFolderName = pathPieces[0]
-  const sharedFolderPath = config.sharedFolders
+  const sharedFolderPath = config.folders
     .filter(x => x.name === sharedFolderName)[0].path
 
   if (!sharedFolderPath) {
