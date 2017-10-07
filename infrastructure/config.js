@@ -1,5 +1,10 @@
+const process = require('process')
 const path = require('path')
-const configFile = require('../config.json')
+const commandLineArgs = require('command-line-args')
+
+const optionDefinitions = [
+  { name: 'config', alias: 'c', type: String },
+]
 
 class Folder {
   constructor(name, fPath) {
@@ -42,5 +47,18 @@ class Config {
     })
   }
 }
+
+const options = commandLineArgs(optionDefinitions)
+
+let configFilePath
+if (options.config.startsWith('/')) {
+  configFilePath = options.config
+} else {
+  configFilePath = path.join(process.cwd(), options.config)
+}
+
+/* eslint-disable import/no-dynamic-require */
+const configFile = require(configFilePath)
 const config = new Config(configFile)
+
 module.exports = config
