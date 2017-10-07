@@ -14,7 +14,7 @@ block content
       form(action="/login" method="post")
         if !loggedIn
           div
-            input(type="text" name="key" placeholder="Key")
+            input(type="text" name="key" placeholder="Key" autocomplete="off")
           div
             button(type="submit" value="login" name="action") Login
         else
