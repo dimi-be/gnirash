@@ -4,18 +4,20 @@
   "description": "Easily share directories over the internet with a simple web interface. No database requiered. Features users, downloading and uploading.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ncu": "./node_modules/npm-check-updates/bin/ncu",
+    "ncu-u": "./node_modules/npm-check-updates/bin/ncu -u"
   },
   "author": "Dimitri Michaux",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb-base": "^11.1.3",
-    "eslint-friendly-formatter": "^2.0.7",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-friendly-formatter": "^3.0.0",
     "eslint-import-resolver-alias": "^1.0.3",
     "eslint-loader": "^1.7.1",
-    "eslint-plugin-html": "^2.0.0",
-    "eslint-plugin-import": "^2.2.0"
+    "eslint-plugin-html": "^3.2.2",
+    "eslint-plugin-import": "^2.8.0"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -24,10 +26,11 @@
     "date-format": "^1.1.0",
     "date-time": "^2.1.0",
     "error-stack-parser": "^2.0.1",
-    "express": "^4.16.0",
-    "filesize": "^3.5.10",
-    "jsonwebtoken": "^8.0.1",
+    "express": "^4.16.2",
+    "filesize": "^3.5.11",
+    "jsonwebtoken": "^8.1.0",
     "mime-types": "^2.1.17",
+    "npm-check-updates": "^2.13.0",
     "pug": "^2.0.0-rc.4"
   }
 }
