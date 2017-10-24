@@ -1,4 +1,6 @@
+const fs = require('fs')
 const path = require('path')
+const https = require('https')
 const express = require('express')
 const config = require('./config')
 const logger = require('./logger')
@@ -51,4 +53,27 @@ function setup() {
   return app
 }
 
-module.exports = setup()
+module.exports = {
+  start: () =>
+    new Promise((resolve, reject) => {
+      const app = setup()
+
+      if (config.protocol === 'http') {
+        app.listen(config.port, () => {
+          resolve([config.protocol, config.port])
+        })
+      } else if (config.protocol === 'https') {
+        const options = {
+          cert: fs.readFileSync(config.https.cert),
+          key: fs.readFileSync(config.https.key),
+        }
+
+        https.createServer(options, app)
+          .listen(config.port, () => {
+            resolve([config.protocol, config.port])
+          })
+      } else {
+        reject(`Unkown protocol: ${config.protocol}`)
+      }
+    }),
+}

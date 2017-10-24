@@ -1,7 +1,6 @@
-const config = require('./infrastructure/config')
 const logger = require('./infrastructure/logger')
-const app = require('./infrastructure/server')
+const server = require('./infrastructure/server')
 
-app.listen(config.port, () => {
-  logger.info('gnirash listening on port 3000!')
+server.start().then(([protocol, port]) => {
+  logger.info(`gnirash listening on ${protocol}://*:${port}!`)
 })

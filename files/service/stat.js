@@ -73,7 +73,8 @@ async function stat(virtualPath) {
     fileType,
     contentType,
     stats.mtime,
-    stats.size)
+    stats.size,
+  )
 
   return file
 }

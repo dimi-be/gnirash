@@ -23,6 +23,8 @@ class User {
 class Config {
   constructor(cfg) {
     this.port = cfg.port
+    this.protocol = cfg.protocol ? cfg.protocol : 'https'
+    this.https = Config.createHttpsSettings(cfg)
     this.siteTitle = cfg.siteTitle
     this.secret = cfg.secret
     this.users = cfg.users.map(u => new User(u.name, u.key))
@@ -31,20 +33,32 @@ class Config {
 
   static createSharedFolders(folders) {
     return folders.map((v) => {
-      let absPath
-
-      if (v.path.startsWith('/')) {
-        absPath = v.path
-      } else if (v.path.startsWith('..')) {
-        absPath = path.join(__dirname, '../..', v.path)
-      } else if (v.path.startsWith('.')) {
-        absPath = path.join(__dirname, '..', v.path)
-      } else {
-        absPath = v.path
-      }
-
+      const absPath = Config.getAboslutePath(v.path)
       return new Folder(v.name, absPath)
     })
+  }
+
+  static createHttpsSettings(cfg) {
+    if (!cfg) {
+      return {}
+    }
+
+    return {
+      cert: Config.getAboslutePath(cfg.https.cert),
+      key: Config.getAboslutePath(cfg.https.key),
+    }
+  }
+
+  static getAboslutePath(relPath) {
+    if (relPath.startsWith('/')) {
+      return relPath
+    } else if (relPath.startsWith('..')) {
+      return path.join(__dirname, '../..', relPath)
+    } else if (relPath.startsWith('.')) {
+      return path.join(__dirname, '..', relPath)
+    }
+
+    return relPath
   }
 }
 
