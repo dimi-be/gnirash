@@ -21,44 +21,43 @@ class User {
 }
 
 class Config {
-  constructor(cfg) {
+  constructor(configFilePath) {
+    /* eslint-disable import/no-dynamic-require, global-require */
+    const cfg = require(configFilePath)
+    this._configFilePath = configFilePath
     this.port = cfg.port
     this.protocol = cfg.protocol ? cfg.protocol : 'https'
-    this.https = Config.createHttpsSettings(cfg)
+    this.https = this._createHttpsSettings(cfg.https)
     this.siteTitle = cfg.siteTitle
     this.secret = cfg.secret
     this.users = cfg.users.map(u => new User(u.name, u.key))
-    this.folders = Config.createSharedFolders(cfg.folders)
+    this.folders = this._createSharedFolders(cfg.folders)
   }
 
-  static createSharedFolders(folders) {
+  _createSharedFolders(folders) {
     return folders.map((v) => {
-      const absPath = Config.getAboslutePath(v.path)
+      const absPath = this._getAboslutePath(v.path)
       return new Folder(v.name, absPath)
     })
   }
 
-  static createHttpsSettings(cfg) {
+  _createHttpsSettings(cfg) {
     if (!cfg) {
       return {}
     }
 
     return {
-      cert: Config.getAboslutePath(cfg.https.cert),
-      key: Config.getAboslutePath(cfg.https.key),
+      cert: this._getAboslutePath(cfg.cert),
+      key: this._getAboslutePath(cfg.key),
     }
   }
 
-  static getAboslutePath(relPath) {
+  _getAboslutePath(relPath) {
     if (relPath.startsWith('/')) {
       return relPath
-    } else if (relPath.startsWith('..')) {
-      return path.join(__dirname, '../..', relPath)
-    } else if (relPath.startsWith('.')) {
-      return path.join(__dirname, '..', relPath)
     }
 
-    return relPath
+    return path.join(path.dirname(this._configFilePath), relPath)
   }
 }
 
@@ -71,8 +70,7 @@ if (options.config.startsWith('/')) {
   configFilePath = path.join(process.cwd(), options.config)
 }
 
-/* eslint-disable import/no-dynamic-require */
-const configFile = require(configFilePath)
-const config = new Config(configFile)
+
+const config = new Config(configFilePath)
 
 module.exports = config

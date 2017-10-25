@@ -73,7 +73,7 @@ module.exports = {
             resolve([config.protocol, config.port])
           })
       } else {
-        reject(`Unkown protocol: ${config.protocol}`)
+        reject(new Error(`Unkown protocol: ${config.protocol}`))
       }
     }),
 }
