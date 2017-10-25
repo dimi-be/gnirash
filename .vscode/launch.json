@@ -9,7 +9,8 @@
         "args": [
           "--config",
           "config.json"
-        ]
+        ],
+        "outputCapture": "std"
       }
     ]
   }

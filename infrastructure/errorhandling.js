@@ -15,8 +15,7 @@ function handleKnownErrors(error, req, res, next) {
   }
 }
 
-const asyncMiddleware = fn =>
-(req, res, next) => {
+const asyncMiddleware = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next))
     .catch((...args) => {
       next(...args)
@@ -30,8 +29,7 @@ const asyncMiddleware = fn =>
  * @param {*} router
  */
 function configure(router) {
-  const get = router.get
-  const post = router.post
+  const { get, post } = router
 
   router.get = (path, fn) => {
     get.call(router, path, asyncMiddleware(fn))

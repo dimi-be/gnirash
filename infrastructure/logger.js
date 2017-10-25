@@ -1,26 +1,59 @@
-/* eslint-disable no-console */
 const errorStackParser = require('error-stack-parser')
 const dateTime = require('date-time')
+const winston = require('winston')
+
+const levels = {
+  error: 0,
+  warning: 1,
+  info: 2,
+  debug: 3,
+}
+
+const colors = {
+  error: 'red',
+  warning: 'yellow',
+  info: 'white',
+  debug: 'grey',
+}
 
 class Logger {
+  constructor() {
+    this._logger = new (winston.Logger)({
+      levels,
+      transports: [
+        new (winston.transports.Console)({
+          timestamp: true,
+          colorize: true,
+        }),
+      ],
+    })
+
+    winston.addColors(colors)
+    this._logger.level = 'debug'
+  }
+
   middleware() {
     return (...args) => this._logRequest(...args)
   }
 
   debug(...args) {
-    console.debug('D', this._getPrefix(), ...args)
+    this._logger.log('debug', ...args)
+    // console.debug('D', this._getPrefix(), ...args)
   }
 
   info(...args) {
-    console.info('I', this._getPrefix(), ...args)
+    this._logger.log('info', args[0])
+    // console.info('I', this._getPrefix(), ...args)
   }
 
   warning(...args) {
-    console.warn('W', this._getPrefix(), ...args)
+    this._logger.log('warning', ...args)
+    // console.warn('W', this._getPrefix(), ...args)
   }
 
   error(...args) {
-    console.error('E', this._getPrefix(), ...args)
+    this._logger.log('error', ...args)
+    // console.error('E', this._getPrefix(), ...args)
   }
 
   _logRequest(request, response, next) {
@@ -42,7 +75,7 @@ class Logger {
 
       return `${callerInfo.fileName}:${callerInfo.lineNumber}:${callerInfo.functionName}`
     } catch (e) {
-      console.error(e)
+      this._logger.log('error', e)
       return ''
     }
   }
