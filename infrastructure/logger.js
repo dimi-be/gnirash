@@ -1,5 +1,4 @@
 const errorStackParser = require('error-stack-parser')
-const dateTime = require('date-time')
 const winston = require('winston')
 
 const levels = {
@@ -13,23 +12,23 @@ const colors = {
   error: 'red',
   warning: 'yellow',
   info: 'white',
-  debug: 'grey',
+  debug: 'blue',
 }
 
 class Logger {
   constructor() {
     this._logger = new (winston.Logger)({
       levels,
+      level: 'info',
       transports: [
         new (winston.transports.Console)({
           timestamp: true,
-          colorize: true,
+          colorize: 'all',
         }),
       ],
     })
 
     winston.addColors(colors)
-    this._logger.level = 'debug'
   }
 
   middleware() {
@@ -37,41 +36,40 @@ class Logger {
   }
 
   debug(...args) {
-    this._logger.log('debug', ...args)
-    // console.debug('D', this._getPrefix(), ...args)
+    this._log('debug', ...args)
   }
 
   info(...args) {
-    this._logger.log('info', args[0])
-    // console.info('I', this._getPrefix(), ...args)
+    this._log('info', ...args)
   }
 
   warning(...args) {
-    this._logger.log('warning', ...args)
-    // console.warn('W', this._getPrefix(), ...args)
+    this._log('warning', ...args)
   }
 
   error(...args) {
-    this._logger.log('error', ...args)
-    // console.error('E', this._getPrefix(), ...args)
+    this._log('error', ...args)
+  }
+
+  _log(level, ...args) {
+    this._logger.log(level, this._getPrefix(), ...args)
   }
 
   _logRequest(request, response, next) {
-    this.info(request.method, request.originalUrl)
+    this._logger.log('info', request.method, request.originalUrl)
     next()
   }
 
   _logRequestError(error, request, response, next) {
-    this.error(error)
+    this.logger.log('error', error)
     next(error)
   }
 
-  /* eslint-disable class-methods-use-this  */
   _getCallerInfo() {
     try {
       const error = new Error()
       const stack = errorStackParser.parse(error)
-      const callerInfo = stack[3]
+      const callerInfo = stack[4]
 
       return `${callerInfo.fileName}:${callerInfo.lineNumber}:${callerInfo.functionName}`
     } catch (e) {
@@ -81,9 +79,8 @@ class Logger {
   }
 
   _getPrefix() {
-    const dateTimeString = dateTime()
     const callerInfo = this._getCallerInfo()
-    return `${dateTimeString} ${callerInfo}():`
+    return `${callerInfo}():`
   }
 }
 
