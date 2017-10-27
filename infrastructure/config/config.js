@@ -1,6 +1,7 @@
 const path = require('path')
 const Folder = require('./folder')
 const User = require('./user')
+const Transport = require('./transport')
 
 class Config {
   constructor(cfg, configFilePath) {
@@ -12,6 +13,7 @@ class Config {
     this.secret = cfg.secret
     this.users = cfg.users.map(u => new User(u.name, u.key))
     this.folders = this._createSharedFolders(cfg.folders)
+    this.logging = this._createLoggingSettings(cfg.logging)
   }
 
   _createSharedFolders(folders) {
@@ -30,6 +32,15 @@ class Config {
       cert: this._getAboslutePath(httpsCfg.cert),
       key: this._getAboslutePath(httpsCfg.key),
     }
+  }
+
+  _createLoggingSettings(loggingCfg) {
+    return loggingCfg.map(v =>
+      new Transport(
+        v.transport,
+        v.level,
+        v.transport === 'file' ? this._getAboslutePath(v.file) : undefined,
+      ))
   }
 
   _getAboslutePath(relPath) {

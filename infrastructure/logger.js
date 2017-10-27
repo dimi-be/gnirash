@@ -1,5 +1,6 @@
 const errorStackParser = require('error-stack-parser')
 const winston = require('winston')
+const config = require('./config')
 
 const levels = {
   error: 0,
@@ -17,15 +18,27 @@ const colors = {
 
 class Logger {
   constructor() {
+    const transports = []
+
+    config.logging.forEach((t) => {
+      if (t.name === 'console') {
+        transports.push(new (winston.transports.Console)({
+          timestamp: true,
+          colorize: 'all',
+          level: t.level,
+        }))
+      } else if (t.name === 'file') {
+        transports.push(new (winston.transports.File)({
+          filename: t.file,
+          level: t.level,
+        }))
+      }
+    })
+
     this._logger = new (winston.Logger)({
       levels,
       level: 'info',
-      transports: [
-        new (winston.transports.Console)({
-          timestamp: true,
-          colorize: 'all',
-        }),
-      ],
+      transports,
     })
 
     winston.addColors(colors)

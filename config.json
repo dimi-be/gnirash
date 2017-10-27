@@ -6,6 +6,14 @@
     "cert": "./testdata/selfsigned.crt",
     "key": "./testdata/selfsigned.key"
   },
+  "logging": [
+    { "transport": "console", "level": "debug" },
+    {
+      "transport": "file",
+      "level": "debug",
+      "file": "./gnirash.log"
+    }
+  ],
   "folders": [
     {
       "name": "test-folder",
