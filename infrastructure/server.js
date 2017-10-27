@@ -22,7 +22,7 @@ function addRoutes(app) {
   logger.info('Adding routes')
 
   app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.redirect('/files')
   })
 
   app.use('/files', filesRoutes)
