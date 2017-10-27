@@ -8,6 +8,18 @@ const File = require('../domain/file')
 const FileType = require('../domain/filetype')
 const errors = require('../domain/errors')
 
+function isInSharedFolder(physicalPath) {
+  let inSharedFolder = false
+
+  config.folders.forEach((f) => {
+    if (physicalPath.startsWith(f.path)) {
+      inSharedFolder = true
+    }
+  })
+
+  return inSharedFolder
+}
+
 /**
  * Transforms the virtualPath into a path that exists
  * on the filesystem.
@@ -28,7 +40,12 @@ async function getPhysicalPath(virtualPath) {
   const remaingPieces = pathPieces.slice(1)
   const physicalPath = path.join(sharedFolderPath, ...remaingPieces)
 
-  logger.debug('physicalPath=', physicalPath)
+  logger.debug(`physicalPath=${physicalPath}`)
+
+  if (!isInSharedFolder(physicalPath)) {
+    throw new Error(errors.accessDenied)
+  }
+
   return physicalPath
 }
 

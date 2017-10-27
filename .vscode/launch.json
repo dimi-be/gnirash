@@ -4,6 +4,21 @@
       {
         "type": "node",
         "request": "launch",
+        "name": "Mocha Tests",
+        "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+        "args": [
+          "-u",
+          "tdd",
+          "--timeout",
+          "999999",
+          "--colors",
+          "${workspaceFolder}/{,!(node_modules)/**/}*.spec.js"
+        ],
+        "internalConsoleOptions": "openOnSessionStart"
+      },
+      {
+        "type": "node",
+        "request": "launch",
         "name": "Launch Program",
         "program": "${workspaceRoot}/index.js",
         "args": [
