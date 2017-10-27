@@ -1,0 +1,3 @@
+Create your self a nice bigfile to test the download speed of gnirash
+
+dd if=/dev/zero of=bigfile.bin bs=1M count=1k
