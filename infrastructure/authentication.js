@@ -66,14 +66,18 @@ async function authenticateRequest(req, res, next) {
     await setSessionCookie(res, newToken)
     next()
   } catch (e) {
-    logger.debug(e)
-    logger.warning('User not authenticated')
+    if (e.message === 'jwt must be provided') {
+      logger.warning('User not authenticated')
 
-    if (req.baseUrl !== '/login') {
-      logout(res, req)
-      next(new Error(errors.unauthenticated))
+      if (req.baseUrl !== '/login') {
+        logout(res, req)
+        next(new Error(errors.unauthenticated))
+      } else {
+        next()
+      }
     } else {
-      next()
+      logger.error(e)
+      throw e
     }
   }
 }
