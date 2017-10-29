@@ -12,15 +12,16 @@
           "--timeout",
           "999999",
           "--colors",
-          "${workspaceFolder}/{,!(node_modules)/**/}*.spec.js"
+          "${workspaceFolder}/bin/{,!(node_modules)/**/}*.spec.js"
         ],
         "internalConsoleOptions": "openOnSessionStart"
       },
       {
         "type": "node",
         "request": "launch",
+        "cwd": "${workspaceFolder}",
         "name": "Launch Program",
-        "program": "${workspaceRoot}/index.js",
+        "program": "${workspaceRoot}/bin/index.js",
         "args": [
           "--config",
           "config.json"
