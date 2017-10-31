@@ -1,10 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const logger = require('./logger')
 const render = require('./render')
 const errorHandling = require('./errorhandling')
 const authentication = require('./authentication')
-const logger = require('./logger')
 
 module.exports = () => {
   const router = express.Router()

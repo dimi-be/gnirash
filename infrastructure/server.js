@@ -22,7 +22,7 @@ function addRoutes(app) {
   logger.info('Adding routes')
 
   app.get('/', (req, res) => {
-    res.send('fuck')
+    res.redirect('/files')
   })
 
   app.use('/files', filesRoutes)
@@ -31,7 +31,7 @@ function addRoutes(app) {
 
 function addStaticRoutes(app) {
   logger.info('Adding static routes')
-  const themesPath = path.join(__dirname, '..', 'themes')
+  const themesPath = path.join(config.programRoot, 'themes')
   app.use('/themes', express.static(themesPath))
 }
 

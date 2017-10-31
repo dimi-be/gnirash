@@ -1,4 +1,5 @@
 const path = require('path')
+const config = require('./config')
 
 function getViewPath(para, originalUrl) {
   const urlPieces = originalUrl
@@ -6,8 +7,7 @@ function getViewPath(para, originalUrl) {
     .filter(v => (v !== ''))
     .concat([''])
   const viewFile = path.join(
-    __dirname,
-    '..',
+    config.programRoot,
     urlPieces[0],
     'routes',
     urlPieces[urlPieces.length - 1],
