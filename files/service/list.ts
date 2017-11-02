@@ -1,25 +1,22 @@
-const fs = require('fs')
-const util = require('util')
+import fs = require('fs')
+import util = require('util')
 const path = require('path')
 const config = require('../../infrastructure/config')
-const File = require('../domain/file')
-const FileType = require('../domain/filetype')
-const stat = require('./stat')
+import File = require('../domain/file')
+import FileType = require('../domain/filetype')
+import stat = require('./stat')
 
 /**
  * Returns a list of files and directories in the given directory
- *
- * @param {File} directory
- * @returns {File[]}
  */
-async function list(directory) {
+export default async function list(directory: File): Promise<File[]> {
   if (directory.fileType === FileType.root) {
     const files = config.folders
       .map(folder => new File(
         folder.path,
         path.join('/', folder.name),
         FileType.directory,
-        false,
+        undefined,
         new Date(1986, 0, 1),
         0,
       ))
@@ -34,5 +31,3 @@ async function list(directory) {
 
   return Promise.all(stats)
 }
-
-module.exports = list

@@ -1,14 +1,14 @@
-const fs = require('fs')
-const path = require('path')
-const util = require('util')
+import fs = require('fs')
+import path = require('path')
+import util = require('util')
 const mime = require('mime-types')
 const config = require('../../infrastructure/config')
 const logger = require('../../infrastructure/logger')
-const File = require('../domain/file')
-const FileType = require('../domain/filetype')
+import File = require('../domain/file')
+import FileType = require('../domain/filetype')
 const errors = require('../domain/errors')
 
-function isInSharedFolder(physicalPath) {
+function isInSharedFolder(physicalPath: string): boolean {
   let inSharedFolder = false
 
   config.folders.forEach((f) => {
@@ -23,11 +23,8 @@ function isInSharedFolder(physicalPath) {
 /**
  * Transforms the virtualPath into a path that exists
  * on the filesystem.
- *
- * @param {string} virtualPath
- * @return {string}
  */
-async function getPhysicalPath(virtualPath) {
+function getPhysicalPath(virtualPath: string): string {
   const pathPieces = virtualPath.split('/').filter(x => x !== '')
   const sharedFolderName = pathPieces[0]
   const sharedFolderPath = config.folders
@@ -49,7 +46,7 @@ async function getPhysicalPath(virtualPath) {
   return physicalPath
 }
 
-function getFileType(stats) {
+function getFileType(stats: fs.Stats): FileType {
   if (stats.isDirectory()) {
     return FileType.directory
   }
@@ -63,18 +60,15 @@ function getFileType(stats) {
 
 /**
  * Get a file based on the physical (real) path given
- *
- * @param {string} virtualPath
- * @return {File}
  */
-async function stat(virtualPath) {
+async function stat(virtualPath: string): Promise<File> {
   logger.debug(virtualPath)
 
   if (!virtualPath || virtualPath === '/') {
     return File.root
   }
 
-  const physicalPath = await getPhysicalPath(virtualPath)
+  const physicalPath = getPhysicalPath(virtualPath)
   const stats = await util.promisify(fs.stat)(physicalPath)
   const fileType = getFileType(stats)
 
@@ -96,4 +90,4 @@ async function stat(virtualPath) {
   return file
 }
 
-module.exports = stat
+export = stat

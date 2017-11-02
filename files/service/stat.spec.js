@@ -3,12 +3,14 @@ const path = require('path')
 const assert = require('assert')
 const mock = require('mock-require')
 
+const programRoot = path.join(__dirname, '..', '..', '..')
+
 describe('stat', function () {
   before(function () {
     mock('../../infrastructure/config', {
       folders: [{
         name: 'foo',
-        path: path.join(__dirname, '../../testdata/test-folder'),
+        path: path.join(programRoot, 'testdata', 'test-folder'),
       }],
     })
     mock('../../infrastructure/logger', new Proxy({}, {
@@ -26,7 +28,7 @@ describe('stat', function () {
     return stat('foo/file.txt')
       .then((f) => {
         assert.equal(f.virtualPath, 'foo/file.txt')
-        assert.equal(f.physicalPath, path.join(__dirname, '../../testdata/test-folder/file.txt'))
+        assert.equal(f.physicalPath, path.join(programRoot, 'testdata', 'test-folder', 'file.txt'))
       })
   })
 
