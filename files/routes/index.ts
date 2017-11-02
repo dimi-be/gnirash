@@ -1,7 +1,8 @@
+import FileType = require('../domain/filetype')
+import errors = require('../domain/errors')
+import * as list from './list'
+
 const router = require('../../infrastructure/router')()
-const FileType = require('../domain/filetype')
-const errors = require('../domain/errors')
-const list = require('./list')
 
 router.get('/*?', async (req, res) => {
   const model = await list.get(req.params[0])
@@ -15,4 +16,4 @@ router.get('/*?', async (req, res) => {
   }
 })
 
-module.exports = router
+export = router

@@ -3,14 +3,21 @@ const dateFormat = require('date-format')
 const fileSize = require('filesize')
 const logger = require('../../infrastructure/logger')
 const settings = require('../domain/settings')
-const FileType = require('../domain/filetype')
-const fileService = require('../service')
+import File = require('../domain/file')
+import FileType = require('../domain/filetype')
+import * as fileService from '../service'
 
 class FileDto {
-  /**
-   * @param {File} file
-   */
-  constructor(file) {
+  public name: string
+  public fileType: FileType
+  public virtualPath: string
+  public physicalPath: string
+  public virtualPathParent: string
+  public modifiedDate: string
+  public size: string
+  public icon: string
+
+  constructor(file: File) {
     this.name = file.name
     this.fileType = file.fileType
     this.virtualPath = path.join(`/${settings.name}`, file.virtualPath)
@@ -23,12 +30,12 @@ class FileDto {
     this.icon = this.getIcon(file.contentType)
   }
 
-  getIcon(contentType) {
+  getIcon(contentType: string): string {
     if (this.fileType === FileType.directory || this.fileType === FileType.root) {
       return 'folder'
     }
 
-    if (typeof contentType === 'string' && contentType.indexOf('/' !== -1)) {
+    if (typeof contentType === 'string' && contentType.indexOf('/') !== -1) {
       const [type, subType] = contentType.split('/')
 
       if (type === 'text' || subType === 'pdf') {
@@ -50,17 +57,18 @@ class FileDto {
 }
 
 class ListModel {
+  public title: string
+  public file: FileDto
+  public files: FileDto[]
+
   constructor() {
     this.title = 'List'
-    this.file = {}
     this.files = []
   }
 }
 
-/**
- * @param {File} file
- */
-async function createModel(file) {
+export async function get(virtualPath: string): Promise<ListModel> {
+  const file = await fileService.stat(virtualPath)
   const model = new ListModel()
   model.file = new FileDto(file)
 
@@ -72,17 +80,4 @@ async function createModel(file) {
   }
 
   return model
-}
-
-/**
- * @param {string} virtualPath
- * @returns {GetModel}
- */
-async function get(virtualPath) {
-  const file = await fileService.stat(virtualPath)
-  return createModel(file)
-}
-
-module.exports = {
-  get,
 }

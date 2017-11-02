@@ -1,7 +1,6 @@
-import list from './list'
-import stat = require('./stat')
+import listIn from './list'
+import statIn = require('./stat')
 
-module.exports = {
-  list,
-  stat,
-}
+
+export const stat = statIn
+export const list = listIn
