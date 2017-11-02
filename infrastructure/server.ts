@@ -10,24 +10,30 @@ import filesRoutes = require('../files/routes')
 import loginRoutes = require('../login/routes')
 
 class Server {
-  public start() {
+  public protocol: string
+  public port: number
+
+  public start(): Promise<Server> {
     return new Promise((resolve, reject) => {
       const app = this._setup()
-      if (config.protocol === 'http') {
-        app.listen(config.port, () => {
-          resolve([config.protocol, config.port])
+      this.protocol = config.protocol
+      this.port = config.port
+
+      if (this.protocol === 'http') {
+        app.listen(this.port, () => {
+          resolve(this)
         })
-      } else if (config.protocol === 'https') {
+      } else if (this.protocol === 'https') {
         const options = {
           cert: fs.readFileSync(config.https.cert),
           key: fs.readFileSync(config.https.key),
         }
         https.createServer(options, app)
-          .listen(config.port, () => {
-            resolve([config.protocol, config.port])
+          .listen(this.port, () => {
+            resolve(this)
           })
       } else {
-        reject(new Error(`Unkown protocol: ${config.protocol}`))
+        reject(new Error(`Unkown protocol: ${this.protocol}`))
       }
     })
   }
@@ -44,7 +50,7 @@ class Server {
     return app
   }
 
-  private _addLocals(app) {
+  private _addLocals(app: express.Application) {
     logger.info('Adding locals')
 
     const locals = {
@@ -54,7 +60,7 @@ class Server {
     Object.assign(app.locals, locals)
   }
 
-  private _addRoutes(app) {
+  private _addRoutes(app: express.Application) {
     logger.info('Adding routes')
 
     app.get('/', (req, res) => {
@@ -65,13 +71,13 @@ class Server {
     app.use('/login', loginRoutes)
   }
 
-  private _addStaticRoutes(app) {
+  private _addStaticRoutes(app: express.Application) {
     logger.info('Adding static routes')
     const themesPath = path.join(config.programRoot, 'themes')
     app.use('/themes', express.static(themesPath))
   }
 
-  private _addMiddleware(app) {
+  private _addMiddleware(app: express.Application) {
     logger.info('Adding middleware')
     app.use(logger.middleware())
     app.use(errorHandling.middleware())
