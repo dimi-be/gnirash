@@ -1,8 +1,9 @@
+import routerfactory from '../../infrastructure/routerfactory'
 import FileType = require('../domain/filetype')
 import errors = require('../domain/errors')
 import * as list from './list'
 
-const router = require('../../infrastructure/router')()
+const router = routerfactory()
 
 router.get('/*?', async (req, res) => {
   const model = await list.get(req.params[0])
