@@ -1,7 +1,12 @@
 const authentication = require('../../infrastructure/authentication')
 
 class LoginModel {
-  constructor(token, loggedIn, infoMessage, errorMessage) {
+  public token: string
+  public loggedIn: boolean
+  public infoMessage: string
+  public errorMessage: string
+
+  constructor(token: string, loggedIn: boolean, infoMessage: string, errorMessage: string = '') {
     this.token = token
     this.loggedIn = loggedIn
     this.infoMessage = infoMessage
@@ -9,7 +14,7 @@ class LoginModel {
   }
 }
 
-function getMessageFromError(error) {
+function getMessageFromError(error: string): string {
   if (error === authentication.errors.invalidCredentials) {
     return 'Your is key invalid!'
   }
@@ -21,7 +26,7 @@ function getMessageFromError(error) {
   return 'An error occured'
 }
 
-async function post(key) {
+export async function post(key: string): Promise<LoginModel> {
   const token = await authentication.authenticate(key)
 
   return new LoginModel(
@@ -31,7 +36,7 @@ async function post(key) {
   )
 }
 
-async function get(message, claims) {
+export async function get(message: string, claims): Promise<LoginModel> {
   const token = undefined
   const loggedIn = claims ? claims.loggedIn : false
   let infoMessage = ''
@@ -53,9 +58,4 @@ async function get(message, claims) {
     infoMessage,
     errorMessage,
   )
-}
-
-module.exports = {
-  post,
-  get,
 }

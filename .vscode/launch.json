@@ -21,6 +21,7 @@
         "request": "launch",
         "cwd": "${workspaceFolder}",
         "name": "Launch Program",
+        "preLaunchTask": "build",
         "program": "${workspaceRoot}/bin/index.js",
         "args": [
           "--config",

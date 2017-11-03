@@ -3,11 +3,11 @@ import * as path from 'path'
 import * as express from 'express'
 import * as https from 'https'
 
-import config = require('./config')
-import logger = require('./logger')
-import errorHandling = require('./errorhandling')
-import filesRoutes = require('../files/routes')
-import loginRoutes = require('../login/routes')
+import config = require('../config')
+import logger = require('../logger')
+import errorHandling = require('../errorhandling')
+import filesRoutes from '../../files/routes'
+import loginRoutes from '../../login/routes'
 
 class Server {
   public protocol: string
@@ -82,7 +82,6 @@ class Server {
     app.use(logger.middleware())
     app.use(errorHandling.middleware())
   }
-
 }
 
-export default new Server()
+export const server = new Server()

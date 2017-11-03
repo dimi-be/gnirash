@@ -1,6 +1,7 @@
 {
   "tasks": [
     {
+      "label": "build",
       "type": "typescript",
       "tsconfig": "tsconfig.json",
       "problemMatcher": [

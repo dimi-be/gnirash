@@ -1,9 +1,9 @@
-import routerfactory from '../../infrastructure/routerfactory'
+import { routerFactory } from '../../infrastructure/server/routerfactory'
 import FileType = require('../domain/filetype')
 import errors = require('../domain/errors')
 import * as list from './list'
 
-const router = routerfactory()
+const router = routerFactory()
 
 router.get('/*?', async (req, res) => {
   const model = await list.get(req.params[0])
@@ -17,4 +17,4 @@ router.get('/*?', async (req, res) => {
   }
 })
 
-export = router
+export default router

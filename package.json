@@ -6,10 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ncu": "./node_modules/npm-check-updates/bin/ncu",
-    "ncu-u": "./node_modules/npm-check-updates/bin/ncu -u",
-    "build": "mkdir -p bin && npm run build-tsc && npm run build-copyfiles",
-    "build-tsc": "./node_modules/.bin/tsc --project ./tsconfig.json",
-    "build-copyfiles": "find . \\( -name *.css -o -name *.pug  -o -name *.gif \\) -a -not -path './node_modules/*' -a -not -path './bin/*' -exec cp -f --parents {} ./bin \\;"
+    "ncu-u": "./node_modules/npm-check-updates/bin/ncu -u"
   },
   "author": "Dimitri Michaux",
   "license": "ISC",
@@ -23,7 +20,6 @@
     "eslint-import-resolver-alias": "^1.0.3",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-html": "^3.2.2",
-    "eslint-plugin-import": "^2.8.0",
     "mocha": "^4.0.1",
     "mock-require": "^2.0.2",
     "typescript": "^2.5.3"

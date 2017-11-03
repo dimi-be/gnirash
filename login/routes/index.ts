@@ -1,8 +1,11 @@
-const router = require('../../infrastructure/router')()
-const authentication = require('../../infrastructure/authentication')
-const login = require('./login')
+import * as Express from 'express'
+import { routerFactory } from '../../infrastructure/server/routerfactory'
+import authentication = require('../../infrastructure/authentication')
+import * as login from './login'
 
-router.get('/?', async (req, res) => {
+const router = routerFactory()
+
+router.get('/?', async (req: Express.Request, res: Express.Response) => {
   const model = await login.get(req.query.message, req.claims)
   res.render('login', model)
 })
@@ -19,4 +22,4 @@ router.post('/', async (req, res) => {
   res.render('login', model)
 })
 
-module.exports = router
+export default router
