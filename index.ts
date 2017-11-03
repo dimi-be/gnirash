@@ -1,7 +1,5 @@
 import { server } from './infrastructure/server/server'
-
 import logger = require('./infrastructure/logger')
-
 
 logger.info(`NODE_ENV = ${process.env.NODE_ENV}`)
 

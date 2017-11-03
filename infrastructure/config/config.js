@@ -14,7 +14,9 @@ class Config {
     this.users = cfg.users.map(u => new User(u.name, u.key))
     this.folders = this._createSharedFolders(cfg.folders)
     this.logging = this._createLoggingSettings(cfg.logging)
-    this.programRoot = path.join(__dirname, '..', '..')
+    this.programRoot = process.env.NODE_ENV === 'development'
+      ? path.join(__dirname, '..', '..', '..')
+      : path.join(__dirname, '..', '..')
   }
 
   _createSharedFolders(folders) {
