@@ -3,9 +3,9 @@ import FileType = require('../domain/filetype')
 import errors = require('../domain/errors')
 import * as list from './list'
 
-const router = routerFactory()
+export const filesRoutes = routerFactory()
 
-router.get('/*?', async (req, res) => {
+filesRoutes.get('/*?', async (req, res) => {
   const model = await list.get(req.params[0])
 
   if (model.file.fileType === FileType.directory || model.file.fileType === FileType.root) {
@@ -16,5 +16,3 @@ router.get('/*?', async (req, res) => {
     throw Error(errors.unkowFileType)
   }
 })
-
-export default router

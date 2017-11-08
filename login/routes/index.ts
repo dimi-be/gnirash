@@ -3,14 +3,14 @@ import { routerFactory } from '../../infrastructure/server/routerfactory'
 import * as authentication from '../../infrastructure/authentication'
 import * as login from './login'
 
-const router = routerFactory()
+export const loginRoutes = routerFactory()
 
-router.get('/?', async (req: Express.Request, res: Express.Response) => {
+loginRoutes.get('/?', async (req: Express.Request, res: Express.Response) => {
   const model = await login.get(req.query.message, req.claims)
   res.render('login', model)
 })
 
-router.post('/', async (req: Express.Request, res: Express.Response) => {
+loginRoutes.post('/', async (req: Express.Request, res: Express.Response) => {
   if (req.body.action === 'logout') {
     authentication.logout(res, req)
     res.redirect('/login?message=loggedOut')
@@ -21,5 +21,3 @@ router.post('/', async (req: Express.Request, res: Express.Response) => {
   await authentication.setSessionCookie(res, model.token)
   res.render('login', model)
 })
-
-export default router

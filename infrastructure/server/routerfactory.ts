@@ -1,7 +1,7 @@
 import * as Express from 'express'
 import * as bodyParser from 'body-parser'
 import cookieParser = require('cookie-parser')
-import logger = require('../logger')
+import { logger } from '../logger'
 import render = require('../render')
 import { errorHandling } from '../errorhandling'
 import authentication = require('../authentication')

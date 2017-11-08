@@ -1,6 +1,6 @@
 import * as Express from 'express'
-const logger = require('./logger')
-const authentication = require('./authentication')
+import { logger } from './logger'
+import { errors } from './authentication'
 
 function handleKnownErrors(
     error: Error,
@@ -8,10 +8,10 @@ function handleKnownErrors(
     res: Express.Response,
     next: Function) {
   switch (error.message) {
-    case authentication.errors.invalidCredentials:
+    case errors.invalidCredentials:
       res.redirect(`/login?message=${error.message}`)
       break
-    case authentication.errors.unauthenticated:
+    case errors.unauthenticated:
       res.redirect(`/login?message=${error.message}`)
       break
     default:

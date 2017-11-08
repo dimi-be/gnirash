@@ -1,5 +1,5 @@
-const errorStackParser = require('error-stack-parser')
-const winston = require('winston')
+import errorStackParser = require('error-stack-parser')
+import * as winston from 'winston'
 const config = require('./config')
 
 const levels = {
@@ -17,6 +17,8 @@ const colors = {
 }
 
 class Logger {
+  private logger: winston.LoggerInstance
+
   constructor() {
     const transports = []
 
@@ -35,50 +37,50 @@ class Logger {
       }
     })
 
-    this._logger = new (winston.Logger)({
+    this.logger = new (winston.Logger)({
+      transports,
       levels,
       level: 'info',
-      transports,
     })
 
     winston.addColors(colors)
   }
 
-  middleware() {
-    return (...args) => this._logRequest(...args)
+  public middleware() {
+    return (request, response, next) => this.logRequest(request, response, next)
   }
 
-  debug(...args) {
-    this._log('debug', ...args)
+  public debug(...args) {
+    this.log('debug', ...args)
   }
 
-  info(...args) {
-    this._log('info', ...args)
+  public info(...args) {
+    this.log('info', ...args)
   }
 
-  warning(...args) {
-    this._log('warning', ...args)
+  public warning(...args) {
+    this.log('warning', ...args)
   }
 
-  error(...args) {
-    this._log('error', ...args)
+  public error(...args) {
+    this.log('error', ...args)
   }
 
-  _log(level, ...args) {
-    this._logger.log(level, this._getPrefix(), ...args)
+  private log(level, ...args) {
+    this.logger.log(level, this.getPrefix(), ...args)
   }
 
-  _logRequest(request, response, next) {
-    this._logger.log('info', request.method, request.originalUrl)
+  private logRequest(request, response, next) {
+    this.logger.log('info', request.method, request.originalUrl)
     next()
   }
 
-  _logRequestError(error, request, response, next) {
+  private logRequestError(error, request, response, next) {
     this.logger.log('error', error)
     next(error)
   }
 
-  _getCallerInfo() {
+  private getCallerInfo() {
     try {
       const error = new Error()
       const stack = errorStackParser.parse(error)
@@ -86,15 +88,15 @@ class Logger {
 
       return `${callerInfo.fileName}:${callerInfo.lineNumber}:${callerInfo.functionName}`
     } catch (e) {
-      this._logger.log('error', e)
+      this.logger.log('error', e)
       return ''
     }
   }
 
-  _getPrefix() {
-    const callerInfo = this._getCallerInfo()
+  private getPrefix() {
+    const callerInfo = this.getCallerInfo()
     return `${callerInfo}():`
   }
 }
 
-module.exports = new Logger()
+export const logger = new Logger()

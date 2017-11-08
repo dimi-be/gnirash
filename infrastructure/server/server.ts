@@ -4,10 +4,10 @@ import * as express from 'express'
 import * as https from 'https'
 
 import config = require('../config')
-import logger = require('../logger')
+import { logger } from '../logger'
 import { errorHandling } from '../errorhandling'
-import filesRoutes from '../../files/routes'
-import loginRoutes from '../../login/routes'
+import { filesRoutes } from '../../files/routes'
+import { loginRoutes } from '../../login/routes'
 
 class Server {
   public protocol: string
@@ -15,7 +15,7 @@ class Server {
 
   public start(): Promise<Server> {
     return new Promise((resolve, reject) => {
-      const app = this._setup()
+      const app = this.setup()
       this.protocol = config.protocol
       this.port = config.port
 
@@ -38,19 +38,19 @@ class Server {
     })
   }
 
-  private _setup() {
+  private setup() {
     logger.info('Setting up express')
 
     const app = express()
-    this._addLocals(app)
-    this._addRoutes(app)
-    this._addStaticRoutes(app)
-    this._addMiddleware(app)
+    this.addLocals(app)
+    this.addRoutes(app)
+    this.addStaticRoutes(app)
+    this.addMiddleware(app)
 
     return app
   }
 
-  private _addLocals(app: express.Application) {
+  private addLocals(app: express.Application) {
     logger.info('Adding locals')
 
     const locals = {
@@ -60,7 +60,7 @@ class Server {
     Object.assign(app.locals, locals)
   }
 
-  private _addRoutes(app: express.Application) {
+  private addRoutes(app: express.Application) {
     logger.info('Adding routes')
 
     app.get('/', (req, res) => {
@@ -71,13 +71,13 @@ class Server {
     app.use('/login', loginRoutes)
   }
 
-  private _addStaticRoutes(app: express.Application) {
+  private addStaticRoutes(app: express.Application) {
     logger.info('Adding static routes')
     const themesPath = path.join(config.programRoot, 'themes')
     app.use('/themes', express.static(themesPath))
   }
 
-  private _addMiddleware(app: express.Application) {
+  private addMiddleware(app: express.Application) {
     logger.info('Adding middleware')
     app.use(logger.middleware())
     app.use(errorHandling.middleware())
