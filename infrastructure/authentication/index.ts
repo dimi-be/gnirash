@@ -1,48 +1,23 @@
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const config = require('./config')
-const logger = require('./logger')
 
-const errors = {
-  invalidCredentials: 'invalidCredentials',
-  unauthenticated: 'unauthenticated',
-}
+import * as errors from './errors'
+import { Claims } from './claims'
 
-async function setSessionCookie(res, token) {
+const config = require('../config')
+const logger = require('../logger')
+
+export { errors, Claims }
+
+export async function setSessionCookie(res, token) {
   res.cookie('jwt', token, {
     maxAge: 365 * 24 * 60 * 60 * 1000,
   })
 }
 
-async function logout(res, req) {
+export async function logout(res, req) {
   res.clearCookie('jwt')
   req.claims = { loggedIn: false }
-}
-
-async function authenticate(key) {
-  const user = config.users
-    .filter(u => u.key === key)[0]
-
-  if (!user) {
-    logger.warning(errors.invalidCredentials, key)
-    throw new Error(errors.invalidCredentials)
-  }
-
-  const keyHash = crypto.createHash('sha256')
-    .update(user.key)
-    .digest('hex')
-
-  const claims = {
-    name: user.name,
-    loggedIn: true,
-    keyHash,
-    expiresIn: '1 year',
-  }
-
-  const token = jwt.sign(claims, config.secret)
-
-  logger.info('User authenticated', claims.name)
-  return token
 }
 
 function getKeyFromHash(keyHash) {
@@ -52,7 +27,7 @@ function getKeyFromHash(keyHash) {
   return user.key
 }
 
-async function authenticateRequest(req, res, next) {
+async function authenticateRequest(req, res, next): Promise<void> {
   try {
     const token = req.cookies.jwt
     const claims = jwt.verify(token, config.secret)
@@ -82,14 +57,31 @@ async function authenticateRequest(req, res, next) {
   }
 }
 
-function middleware() {
+export function middleware() {
   return authenticateRequest
 }
 
-module.exports = {
-  middleware,
-  authenticate,
-  setSessionCookie,
-  logout,
-  errors,
+export async function authenticate(key) {
+  const user = config.users
+    .filter(u => u.key === key)[0]
+
+  if (!user) {
+    logger.warning(errors.invalidCredentials, key)
+    throw new Error(errors.invalidCredentials)
+  }
+
+  const keyHash = crypto.createHash('sha256')
+    .update(user.key)
+    .digest('hex')
+
+  const claims = new Claims(
+    keyHash,
+    user.name,
+    true,
+    '1 year')
+
+  const token = jwt.sign(claims, config.secret)
+
+  logger.info('User authenticated', claims.name)
+  return token
 }

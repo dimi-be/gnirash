@@ -1,6 +1,6 @@
 import * as Express from 'express'
 import { routerFactory } from '../../infrastructure/server/routerfactory'
-import authentication = require('../../infrastructure/authentication')
+import * as authentication from '../../infrastructure/authentication'
 import * as login from './login'
 
 const router = routerFactory()

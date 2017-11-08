@@ -1,3 +1,4 @@
+import { Claims } from '../../infrastructure/authentication'
 const authentication = require('../../infrastructure/authentication')
 
 class LoginModel {
@@ -36,7 +37,7 @@ export async function post(key: string): Promise<LoginModel> {
   )
 }
 
-export async function get(message: string, claims): Promise<LoginModel> {
+export async function get(message: string, claims: Claims): Promise<LoginModel> {
   const token = undefined
   const loggedIn = claims ? claims.loggedIn : false
   let infoMessage = ''
