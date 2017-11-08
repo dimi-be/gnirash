@@ -10,7 +10,7 @@ router.get('/?', async (req: Express.Request, res: Express.Response) => {
   res.render('login', model)
 })
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Express.Request, res: Express.Response) => {
   if (req.body.action === 'logout') {
     authentication.logout(res, req)
     res.redirect('/login?message=loggedOut')

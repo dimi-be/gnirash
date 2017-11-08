@@ -3,10 +3,10 @@ import * as bodyParser from 'body-parser'
 import cookieParser = require('cookie-parser')
 import logger = require('../logger')
 import render = require('../render')
-import errorHandling = require('../errorhandling')
+import { errorHandling } from '../errorhandling'
 import authentication = require('../authentication')
 
-export function routerFactory (): Express.Router {
+export function routerFactory(): Express.Router {
   const router = Express.Router()
   errorHandling.configure(router)
   router.use(logger.middleware())

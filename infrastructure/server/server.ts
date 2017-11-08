@@ -5,7 +5,7 @@ import * as https from 'https'
 
 import config = require('../config')
 import logger = require('../logger')
-import errorHandling = require('../errorhandling')
+import { errorHandling } from '../errorhandling'
 import filesRoutes from '../../files/routes'
 import loginRoutes from '../../login/routes'
 

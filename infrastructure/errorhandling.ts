@@ -1,8 +1,12 @@
-/* eslint-disable no-param-reassign */
+import * as Express from 'express'
 const logger = require('./logger')
 const authentication = require('./authentication')
 
-function handleKnownErrors(error, req, res, next) {
+function handleKnownErrors(
+    error: Error,
+    req: Express.Request,
+    res: Express.Response,
+    next: Function) {
   switch (error.message) {
     case authentication.errors.invalidCredentials:
       res.redirect(`/login?message=${error.message}`)
@@ -15,7 +19,7 @@ function handleKnownErrors(error, req, res, next) {
   }
 }
 
-const asyncMiddleware = fn => (req, res, next) => {
+const asyncMiddleware = fn => (req: Express.Request, res: Express.Response, next: Function) => {
   Promise.resolve(fn(req, res, next))
     .catch((...args) => {
       next(...args)
@@ -28,20 +32,20 @@ const asyncMiddleware = fn => (req, res, next) => {
  *
  * @param {*} router
  */
-function configure(router) {
+function configure(router: Express.Router) {
   const { get, post } = router
 
   router.get = (path, fn) => {
-    get.call(router, path, asyncMiddleware(fn))
+    return get.call(router, path, asyncMiddleware(fn))
   }
 
   router.post = (path, fn) => {
-    post.call(router, path, asyncMiddleware(fn))
+    return post.call(router, path, asyncMiddleware(fn))
   }
 }
 
 function middleware() {
-  return (err, req, res, next) => {
+  return (err: Error, req: Express.Request, res: Express.Response, next: (e: Error) => any) => {
     logger.error(err)
 
     if (err && err.message) {
@@ -52,7 +56,7 @@ function middleware() {
   }
 }
 
-module.exports = {
+export const errorHandling = {
   configure,
   middleware,
 }
