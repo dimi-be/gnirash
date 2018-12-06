@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "ncu": "./node_modules/npm-check-updates/bin/ncu",
-    "ncu-u": "./node_modules/npm-check-updates/bin/ncu -u"
+    "ncu-u": "./node_modules/npm-check-updates/bin/ncu -u",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Dimitri Michaux",
   "license": "ISC",
@@ -33,7 +35,9 @@
     "jsonwebtoken": "^8.1.0",
     "mime-types": "^2.1.17",
     "npm-check-updates": "^2.13.0",
-    "pug": "^2.0.0-rc.4",
-    "winston": "^2.4.0"
-  }
+    "pug": "^2.0.0",
+    "winston": "^2.4.0",
+    "snyk": "^1.115.0"
+  },
+  "snyk": true
 }
